@@ -10,12 +10,12 @@ python = "^3.10"
 factory-boy = "^3.3.0"
 djangorestframework = "^3.14.0"
 pytest-django = "^4.8.0"
-Django = "^5.0.2"
 flake8 = "^7.0.0"
 black = "^24.2.0"
 django-extensions = "^3.2.3"
 psycopg2-binary = "^2.9.9"
 pillow = "^10.2.0"
+django = "^5.0.2"
 
 
 [build-system]
