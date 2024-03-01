@@ -8,12 +8,12 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 
 
 class UserManager(BaseUserManager):
-    def _create_user(self, username, email, password, is_staff, is_superuser, **extra_fields):
+    def _create_user(self, first_name, last_name, email, password, is_staff, is_superuser, **extra_fields):
         now = timezone.now()
-        if not username:
-            raise ValueError(_('The given username must be set'))
+        if not first_name:
+            raise ValueError(_('A first name must be set'))
         email = self.normalize_email(email)
-        user = self.model(username=username, email=email,
+        user = self.model(first_name=first_name, last_name=last_name, email=email,
         is_staff=is_staff, is_active=True,
         is_superuser=is_superuser, last_login=now,
         date_joined=now, **extra_fields)
@@ -21,24 +21,17 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_user(self, username, email=None, password=None, **extra_fields):
-        return self._create_user(username, email, password, False, False, **extra_fields)
+    def create_user(self, email=None, first_name='Default', last_name='Default', password=None, **extra_fields):
+        return self._create_user(first_name, last_name, email, password, **extra_fields)
 
-    def create_superuser(self, username, email, password, **extra_fields):
-        user = self._create_user(username, email, password, True, True, **extra_fields)
+    def create_superuser(self, email=None, first_name='Default', last_name='Default', password=None, **extra_fields):
+        user = self._create_user(first_name, last_name, email, password, True, True, **extra_fields)
         user.is_active = True
         user.save(using=self._db)
         return user
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-
-    username = models.CharField(_('username'), max_length=15, unique=True,
-                                help_text=_('Required. 15 characters or fewer. Letters,'
-                                            ' numbers and @/./+/-/_ characters'),
-                                validators=[validators.RegexValidator(
-                                    re.compile('^[\w.@+-]+$'), _('Enter a valid username.'),
-                                    _('invalid'))])
 
     first_name = models.CharField(_('first name'), max_length=30)
 
@@ -57,7 +50,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     help_text=_('Designates whether this user has confirmed his account.'))
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
+    REQUIRED_FIELDS = ['first_name', 'last_name']
     objects = UserManager()
 
     class Meta:

@@ -1,11 +1,10 @@
-from core.settings import AUTH_USER_MODEL
+from .profile import Profile
 from django.db import models
 from django.utils.text import slugify
 
 
-
 class Post(models.Model):
-    author = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
     text_content = models.TextField()
     image_content = models.ImageField(blank=True, null=True)
     created_on = models.DateTimeField(auto_now_add=True)
