@@ -21,7 +21,7 @@ class Profile(models.Model):
                                 validators=[validators.RegexValidator(
                                     re.compile('^[\w.@+-]+$'), _('Enter a valid username.'),
                                     _('invalid'))])
-    age = models.DateTimeField()
+
     avatar = models.URLField(db_index=True, blank=True)
     sex = models.CharField(choices=SEX_CHOICE, default='U', max_length=1)
 
