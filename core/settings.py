@@ -15,7 +15,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DATETIME_FORMAT = '%d-%m-%Y %H:%M:%S'
+DATETIME_FORMAT = '%D-%M-%Y'
 USE_L10N = False
 USE_TZ = False # if you plan to disable timezone support
 
