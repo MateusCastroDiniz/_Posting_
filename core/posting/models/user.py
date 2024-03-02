@@ -8,12 +8,12 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 
 
 class UserManager(BaseUserManager):
-    def _create_user(self, first_name, last_name, email, password, is_staff, is_superuser, **extra_fields):
+    def _create_user(self, first_name, last_name, birthday, email, password, is_staff, is_superuser, **extra_fields):
         now = timezone.now()
         if not first_name:
             raise ValueError(_('A first name must be set'))
         email = self.normalize_email(email)
-        user = self.model(first_name=first_name, last_name=last_name, email=email,
+        user = self.model(first_name=first_name, last_name=last_name, birthday=birthday, email=email,
         is_staff=is_staff, is_active=True,
         is_superuser=is_superuser, last_login=now,
         date_joined=now, **extra_fields)
@@ -21,11 +21,11 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_user(self, email=None, first_name='Default', last_name='Default', password=None, **extra_fields):
-        return self._create_user(first_name, last_name, email, password, **extra_fields)
+    def create_user(self, birthday, email=None, first_name='Default', last_name='Default', password=None, **extra_fields):
+        return self._create_user(birthday, first_name, last_name,  email, password, **extra_fields)
 
-    def create_superuser(self, email=None, first_name='Default', last_name='Default', password=None, **extra_fields):
-        user = self._create_user(first_name, last_name, email, password, True, True, **extra_fields)
+    def create_superuser(self, birthday, email=None, first_name='Default', last_name='Default', password=None, **extra_fields):
+        user = self._create_user(birthday, first_name, last_name, email, password, True, True, **extra_fields)
         user.is_active = True
         user.save(using=self._db)
         return user
@@ -36,6 +36,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(_('first name'), max_length=30)
 
     last_name = models.CharField(_('last name'), max_length=30)
+
+    birthday = models.DateTimeField(format('%D-%M-%Y %H:%M:%S'))
 
     email = models.EmailField(_('email address'), max_length=255, unique=True)
 
@@ -50,7 +52,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     help_text=_('Designates whether this user has confirmed his account.'))
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'birthday']
     objects = UserManager()
 
     class Meta:
