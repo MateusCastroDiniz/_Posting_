@@ -2,6 +2,7 @@ from django.db import models
 from .user import User
 from core.settings import DATETIME_FORMAT
 
+
 class Relation(models.Model):
     follower = models.ForeignKey(User, related_name='follower_username', on_delete=models.CASCADE)
     followed = models.ForeignKey(User, related_name='followed_username', on_delete=models.CASCADE)
