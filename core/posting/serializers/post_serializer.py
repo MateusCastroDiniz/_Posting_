@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from core.posting.models import Comment, Post
+from core.posting.models import Post
 from .comment_serializer import CommentSerializer
 
 
