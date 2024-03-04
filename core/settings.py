@@ -17,7 +17,7 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIRS = os.path.join(BASE_DIR, 'templates')
 
-DATETIME_FORMAT = '%D-%M-%Y'
+DATETIME_FORMAT = '%d-%m-%Y %H:%m'
 USE_L10N = False
 USE_TZ = False # if you plan to disable timezone support
 

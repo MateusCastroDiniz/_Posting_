@@ -24,5 +24,11 @@ class PostAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('content', 'post', 'created_on')
+    list_display = ('content', 'post', 'created_on', 'updated_on')
     list_filter = ('created_on',)
+
+
+@admin.register(Relation)
+class RelationsAdmin(admin.ModelAdmin):
+    list_display = ('follower', 'followed')
+    search_fields = ['followed']

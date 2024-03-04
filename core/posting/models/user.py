@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from core.settings import DATETIME_FORMAT
 
 SEX_CHOICE = (
     ('M', 'Male'),
