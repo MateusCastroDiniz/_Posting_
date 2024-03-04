@@ -3,9 +3,9 @@ import pytest
 
 @pytest.fixture
 def create_comment():
-    return CommentFactory(content='Pipoca quente na manteiga?', created_by=ProfileFactory(username='Corvo'),
+    return CommentFactory(content='Pipoca quente na manteiga?', created_by=UserFactory(username='Corvo'),
                           post=PostFactory(text_content='Pipoca quente na manteiga!',
-                                           author=ProfileFactory(username='Pica pau')))
+                                           author=UserFactory(username='Pica pau')))
 
 @pytest.mark.django_db
 def test_comment_created(create_comment):
