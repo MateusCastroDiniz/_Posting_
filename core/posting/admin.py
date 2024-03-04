@@ -4,8 +4,8 @@ from .models import *
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('email', 'is_staff', 'is_trusty')
-    search_fields = ['email']
+    list_display = ('username', 'sex', 'email', 'is_staff', 'is_trusty')
+    search_fields = ['usename']
     list_filter = ('is_staff',)
 
 
@@ -20,12 +20,6 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ['author', 'slug']
     list_filter = ('created_on',)
     inlines = [CommentInline]
-
-
-@admin.register(Profile)
-class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('username', 'avatar', 'sex',)
-    search_fields = ['username']
 
 
 @admin.register(Comment)
