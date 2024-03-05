@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <ul>
+        {% for post in feed %}
+        <li>
+            {{post.author}}<br>
+            {{post.text_content}}
+            {{post.comments}}
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

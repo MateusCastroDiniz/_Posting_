@@ -1,6 +1,6 @@
 from django.db import models
 from .user import User
-from core.settings import DATETIME_FORMAT
+
 
 
 class Relation(models.Model):
@@ -12,4 +12,4 @@ class Relation(models.Model):
         ordering = ['-since']
 
     def __str__(self):
-        return self.follower.username + ' está seguindo ' + self.followed.username + ' desde ' + str(self.since)
+        return self.follower.username
