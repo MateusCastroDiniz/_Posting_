@@ -31,3 +31,12 @@ class CommentFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Comment
+
+
+class RelationFactory(factory.django.DjangoModelFactory):
+    follower = factory.SubFactory(UserFactory)
+    followed = factory.SubFactory(UserFactory)
+
+    class Meta:
+        model = Relation
+
