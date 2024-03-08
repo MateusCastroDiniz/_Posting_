@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    {% if user.is_authenticated %}
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Salvar</button>
+        </form>
+    {% endif %}
+    {% if not user.is_authenticated %}
+        <h1>Faça seu login</h1>
+        <p> Ou registre-se </p>
+    {%  endif %}
+
+</body>
+</html>
