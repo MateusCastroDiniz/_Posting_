@@ -1,0 +1,30 @@
+{% extends 'base.html'%} {% block content %}
+{% for post in feed %}
+            <a href="{% url 'post_detail' post.slug%}">
+                    <div class="card m-3">
+                      <div class="card-header">
+                        <h1>{% block title %} {{ post.author_username }} {% endblock title %}</h1>
+                      </div>
+                      <div class="card-body">
+                        <p class=" text-muted">{{ post.author_username }} | {{ post.created_on }}</p>
+                        <p class="card-text ">{{ post.text_content }}</p>
+                        {% if post.image_content %}
+                          {{ post.image_content }}
+                        {% endif%}
+
+                      </div>
+                      <div class="card-footer">
+
+<!--                          {% for comment in comments %}-->
+<!--                             {% if comment.post.id == post.id %}-->
+<!--                                  {{ comment.created_by }}-->
+<!--                                  {{ comment.content }}-->
+<!--                              {%endif%}-->
+
+<!--                          {% endfor %}-->
+
+                      </div>
+                    </div>
+            </a>
+        {% endfor %}
+{% endblock content%}
