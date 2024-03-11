@@ -1,18 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <ul>
-        {% for post in feed %}
-        <li>
-            {{post.author}}<br>
-            {{post.text_content}}
-            {{post.comments}}
-        </li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% for post in feed %}
+<!--    <li>-->
+<!--        {{post.author}}<br>-->
+<!--        {{post.text_content}}-->
+<!--        {{post.comments}}-->
+<!--    </li>-->
+
+    <div class="card">
+        <div class="card-header">
+            <p class="fs-4 fw-regular">{{ post.author_username }}</p>
+        </div>
+        <div class="card-body">
+            {{ post.text_content }}
+            {{ post.image_content}}
+        </div>
+    </div>
+
+    {% endfor %}
+
+    <a href="{% url 'profile' %}">perfil</a>
+
+
+
+
+{% endblock content%}
