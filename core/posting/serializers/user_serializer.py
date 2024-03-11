@@ -11,24 +11,24 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'first_name',
-            'last_name',
+            'complete_name',
             'username',
             'email',
             'birthday',
-            'sex'
+            'sex',
+            'avatar'
         ]
 
     def create(self, validated_data):
         return User.objects.create(**validated_data)
 
     def update_user(self, instance, validated_data):
-        instance.first_name = validated_data.get('first_name', instance.first_name)
-        instance.last_name = validated_data.get('first_name', instance.last_name)
+        instance.complete_name = validated_data.get('complete_name', instance.complete_name)
         instance.username = validated_data.get('username', instance.username)
         instance.sex = validated_data.get('sex', instance.sex)
         instance.email = validated_data.get('email', instance.email)
         instance.avatar = validated_data.get('avatar', instance.avatar)
         instance.brithday = validated_data.get('birthday', instance.brithday)
+        instance.avatar = validated_data.get('avatar', instance.avatar)
         instance.save()
         return instance

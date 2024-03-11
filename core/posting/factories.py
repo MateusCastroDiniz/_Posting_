@@ -3,10 +3,9 @@ import factory
 
 
 class UserFactory(factory.django.DjangoModelFactory):
-    first_name = factory.Faker('first_name')
-    last_name = factory.Faker('last_name')
+    complete_name = factory.Faker('name')
     username = factory.Faker('name')
-    email = factory.LazyAttribute(lambda x: "%s@exemple.com" % x.first_name)
+    email = factory.LazyAttribute(lambda x: "%s@exemple.com" % x.complete_name.split(' ')[0])
     birthday = factory.Faker('date_of_birth')
 
     class Meta:
