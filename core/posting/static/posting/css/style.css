@@ -1,0 +1,44 @@
+#testeh2{
+    color: red !important;
+}
+.grow{
+    flex-grow: 1;
+}
+
+.invalido {
+  border: 1px solid #ff0000; }
+
+.text-muted {
+  display: none; }
+
+small.text-muted {
+  color: #f00 !important; }
+
+#avatar-content{
+  position: relative;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+#avatar{
+  width: 100%;
+}
+
+#avatar-profile-content{
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+#avatar-profile{
+  width: 100%;
+}
+
+
+#texto{
+  color:#f00
+}
