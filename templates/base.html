@@ -28,54 +28,44 @@
                 </div>
 
 
-                    <div class="col-9 float-end d-flex justify-content-end p-1">
+                    <div class="col-9 float-end d-flex justify-content-end align-items-center p-1">
                         {% if user.is_authenticated == False %}
                             <div class="button-group columns ">
                                 <a class="btn btn-primary rounded-pill" href="{% url 'login' %}">Sing in</a>
                                 <a class="btn btn-primary rounded-pill" href="{% url 'signup' %}">Sing up</a>
                             </div>
-                        {% endif %}
+                        {% else %}
 
-                            {% if user.is_authenticated %}
+                        <a class="btn btn-primary rounded-pill" href="{% url 'explore' %}">Explore</a>
+                        
+                        <div class="dropdown mx-3">
+                            <button class="btn btn-secondary rounded-pill dropdown-toggle p-auto border-primary border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">+</button>
+                            <ul class="dropdown-menu">
+                                <li><a class='dropdown-item' href="{% url 'profile' %}"> New post</a></li>
+                            </ul>
+                        </div>
                             
-                            <!-- <div class="dropdown">
-                                <a class="btn btn-primary dropdown-toggle rounded-pill" data-bs-toggle="dropdown">Config</a>
-                                <ul class="dropdown-menu">
-                                    <li><a class='dropdown-item' href="{% url 'profile' %}"> Profile</a></li>
-                                    <li><a class='dropdown-item' href="{% url 'profile_edit' %}"> Configurações</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class='dropdown-item' href="{% url 'logout' %}">Sair</a></li>
-                                </ul>
 
-                            </div> -->   
+                        <div class="dropdown mx-sm-3">
+                            <button id="avatar-container" class="btn btn-secondary dropdown-toggle p-0 border-primary border-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {% if user.avatar %}
+                                <img id='avatar' src="{{ user.avatar.url }}" alt="Avatar">
+                                {% else %}
+                                    <p>No avatar available</p>
+                                {% endif %}
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class='dropdown-item' href="{% url 'profile' %}"> Profile</a></li>
+                                <li><a class='dropdown-item' href="{% url 'profile_edit' %}"> Configurações</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class='dropdown-item text-danger' href="{% url 'logout' %}">Sair</a></li>
+                            </ul>
+                        </div>
+                        
 
+
+                        {% endif %}
                                 
-                                    
-                                    <div class="dropdown mx-3">
-                                        <button id="avatar-content" class="btn btn-secondary dropdown-toggle p-0 border-primary border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">+</button>
-                                        <ul class="dropdown-menu">
-                                            <li><a class='dropdown-item' href="{% url 'profile' %}"> New post</a></li>
-                                        </ul>
-                                      </div>
-                                    
-
-                                <div class="dropdown mx-sm-3">
-                                    <button id="avatar-content" class="btn btn-secondary dropdown-toggle p-0 border-primary border-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        {% if user.avatar %}
-                                        <img id='avatar' src="{{ user.avatar.url }}" alt="Avatar">
-                                        {% else %}
-                                            <p>No avatar available</p>
-                                        {% endif %}
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class='dropdown-item' href="{% url 'profile' %}"> Profile</a></li>
-                                        <li><a class='dropdown-item' href="{% url 'profile_edit' %}"> Configurações</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class='dropdown-item text-danger' href="{% url 'logout' %}">Sair</a></li>
-                                    </ul>
-                                </div>
-                                
-                            {% endif %}
 
                     </div>
             </div>
