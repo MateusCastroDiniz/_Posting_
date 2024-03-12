@@ -14,10 +14,18 @@
 small.text-muted {
   color: #f00 !important; }
 
-#avatar-content{
+#avatar-container{
   position: relative;
-  width: 5px;
-  height: 5px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+#avatar-post-container{
+  position: relative;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   overflow: hidden;
 }
@@ -26,7 +34,7 @@ small.text-muted {
   width: 100%;
 }
 
-#avatar-profile-content{
+#avatar-profile-container{
   position: relative;
   width: 200px;
   height: 200px;
@@ -41,4 +49,8 @@ small.text-muted {
 
 #texto{
   color:#f00
+}
+
+.post_image{
+  width: 100%;
 }
