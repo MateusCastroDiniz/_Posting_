@@ -23,6 +23,6 @@ urlpatterns = [
     path('profile/edit', UserViewSet.edit_user, name='profile_edit'),
     path('feed/', post_list, name='feed'),
     path('feed/explore', explore_list, name='explore'),
-    path('feed/p/<slug:slug>/detailed', PostDetail.as_view(), name='post_detail'),
+    path('feed/p/<slug:slug>/', PostDetail.as_view(), name='post_detail'),
     path('feed/<slug:slug>/edit', PostViewSet.edit_post, name='edit_post')
 ]
