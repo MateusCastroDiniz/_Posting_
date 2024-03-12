@@ -1,19 +1,28 @@
-// function StartRegistration() {
-//     document.getElementById("step1").style.display = "block";
-//     document.getElementById("step2").style.display = "none";
-//     document.getElementById("start_registration").style.display = "none";
-// }
+$(document).ready(function () {
+    $('#editPostForm').on('submit', function (e) {
+        e.preventDefault();
+        var post_id = $('#post_id').val();
+        var text_content = $('#text_content').val();
+        var image_content = $('#image_content').attr('src');
 
-
-// function nextStep() {
-//     document.getElementById("step1").style.display = "none";
-//     document.getElementById("step2").style.display = "block";
-// }
-
-// function prevStep() {
-//     document.getElementById("step2").style.display = "none";
-//     document.getElementById("step1").style.display = "block";
-// }
-
-
-
+        // Envie os dados do formulário via AJAX para a viewset de Post
+        $.ajax({
+            type: 'POST',
+            url: '{% url "edit_post" %}',
+            data: {
+                'post_id': post_id,
+                'text_content': text_content,
+                'image_content': image_content,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function (data) {
+                // Se a atualização for bem-sucedida, feche o modal
+                $('#editPostModal').modal('hide');
+                // Atualize a página ou faça qualquer outra ação necessária
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                // Em caso de erro, manipule conforme necessário
+            }
+        });
+    });
+});
