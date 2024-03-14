@@ -11,7 +11,7 @@ def gerar_chave(size=12, chars=string.ascii_letters + string.digits):
 class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     text_content = models.TextField()
-    image_content = models.ImageField(blank=True, null=True)
+    image_content = models.ImageField(upload_to='img',blank=True, null=True)
     created_on = models.DateTimeField(auto_now_add=True, editable=False)
     updated_on = models.DateTimeField(auto_now=True, editable=False)
     slug = models.SlugField(max_length=50, unique=True, blank=True, null=True, editable=False)

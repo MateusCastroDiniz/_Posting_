@@ -13,9 +13,16 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 import os
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+STATIC_URL = "static/"
 TEMPLATES_DIRS = os.path.join(BASE_DIR, 'templates')
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = "/media/"
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DATETIME_FORMAT = '%d-%m-%Y %H:%m'
 USE_L10N = False
@@ -119,15 +126,15 @@ TIME_ZONE = "UTC"
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = "static/"
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5000000
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

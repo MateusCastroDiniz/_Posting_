@@ -15,13 +15,13 @@ SEX_CHOICE = (
 
 
 class UserManager(BaseUserManager):
-    def _create_user(self, first_name, last_name, username, sex, birthday, email, password, is_staff, is_superuser, **extra_fields):
+    def _create_user(self, complete_name, username, birthday, email, password, is_staff, is_superuser, sex='U', **extra_fields):
         now = timezone.now()
-        if not first_name:
+        if not complete_name:
             raise ValueError(_('A first name must be set'))
         email = self.normalize_email(email)
 
-        user = self.model(first_name=first_name, last_name=last_name, username=username, sex=sex,
+        user = self.model(complete_name=complete_name ,username=username, sex=sex,
                           birthday=birthday, email=email, is_staff=is_staff,
                           is_active=True, is_superuser=is_superuser, last_login=now,
                           date_joined=now, **extra_fields)
@@ -30,21 +30,19 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_user(self, birthday, username, sex, email=None, first_name='Default',
-                    last_name='Default', password=None, **extra_fields):
+    def create_user(self, complete_name, username, birthday, email, password, sex='U',
+                    is_staff=False, is_superuser=False, **extra_fields):
 
         return self._create_user(birthday=birthday, username=username, sex=sex,
-                                 first_name=first_name, last_name=last_name,
+                                 is_staff=is_staff, is_superuser=is_superuser, complete_name=complete_name,
                                  email=email, password=password, **extra_fields)
 
-    def create_superuser(self, birthday, username, sex, email=None, first_name='Default',
-                         last_name='Default', password=None, **extra_fields):
+    def create_superuser(self, birthday, username, complete_name, sex='U', email=None, password=None, **extra_fields):
 
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
-        user = self._create_user(first_name=first_name,
-                                 last_name=last_name, username=username, sex=sex,
+        user = self._create_user(complete_name=complete_name, username=username, sex=sex,
                                  birthday=birthday, email=email, password=password,
                                  **extra_fields)
 
@@ -55,9 +53,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
 
-    first_name = models.CharField(_('first name'), max_length=30)
-
-    last_name = models.CharField(_('last name'), max_length=30)
+    complete_name = models.CharField(_('complete name'), max_length=60)
 
     username = models.CharField(_('username'), max_length=15, unique=True,
                                 help_text=_('Required. 15 characters or fewer. Letters,'
@@ -70,7 +66,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     email = models.EmailField(_('email address'), max_length=255, unique=True)
 
-    avatar = models.URLField(db_index=True, blank=True)
+    avatar = models.FileField(upload_to='avatars', blank=True)
 
     sex = models.CharField(_('sex'), choices=SEX_CHOICE, default='U', max_length=1)
 
@@ -86,19 +82,15 @@ class User(AbstractBaseUser, PermissionsMixin):
                                                 'has confirmed his account.'))
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'birthday', 'sex', 'username']
+    REQUIRED_FIELDS = ['complete_name', 'birthday', 'username']
     objects = UserManager()
 
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
-    def get_full_name(self):
-        full_name = '%s %s' % (self.first_name, self.last_name)
-        return full_name.strip()
-
     def get_short_name(self):
-        return self.first_name
+        return str(self.complete_name).split(' ')[0]
 
     def email_user(self, subject, message, from_email=None):
         send_mail(subject, message, from_email, [self.email])

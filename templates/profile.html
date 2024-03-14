@@ -1,12 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Feed</title>
-</head>
-<body>
+{% extends 'base.html'%}
+{% block content %}
+    
+    
+    <div class="col d-flex flex-column flex-md-column align-items-md-start align-items-center">
+        {% if user.avatar %}
+        <div id="avatar-profile-container">
+            <img id='avatar-profile' src="{{ user.avatar.url }}" alt="Avatar">
+        </div>
+        {% else %}
+            <p>No avatar available</p>
+        {% endif %}
+        <h2>{{ username }}</h2>
+        <p>Followers: {{ num_followers }}</p>
+        <p>Following: {{ num_following }}</p>
+        <a href="{% url 'feed'%}"> voltar</a>
+        <a class="btn btn-outline-danger rounded-pill" href="{% url 'logout' %}">sair</a>
+        
+        <!--    Com isso posso criar uma lista de seguidores e pessoas seguidas na mesma página!!! Use o Bootstrap! -->
+        
+        <!--    <h3>Followers:</h3>-->
+        <!--    <ul>-->
+        <!--        {% for follower in followers %}-->
+        <!--            <li>{{ follower }}</li>-->
+        <!--        {% endfor %}-->
+        <!--    </ul>-->
+        <!--    -->
+        <!--    <h3>Following:</h3>-->
+        <!--    <ul>-->
+        <!--        {% for follower in following %}-->
+        <!--            <li>{{ followee }}</li>-->
+        <!--        {% endfor %}-->
+        <!--    </ul>-->
+    </div>
 
+        
 
-
-</body>
-</html>
+{% endblock%}

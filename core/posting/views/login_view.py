@@ -12,7 +12,7 @@ def login_view(request):
             login(request, user)
             return redirect('feed')  # Redireciona para a página de feed
         else:
-            messages.error(request, f"Credenciais inválidas. Por favor, tente novamente.")
+            messages.error(request, "Credenciais inválidas. Por favor, tente novamente.")
             return render(request, 'login.html')
     else:
         return render(request, 'login.html')
