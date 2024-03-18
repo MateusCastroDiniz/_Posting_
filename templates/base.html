@@ -224,18 +224,19 @@
             });
     
             $('#uploadFileInputCreatePost').change(function () {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                var imageUrl = e.target.result;
-                var carouselItem = '<div class="carousel-item active"><img src="' + imageUrl +
-                    '" class="d-block w-100" alt="Imagem"></div>';
-                $('#preview-post-image-create').append(carouselItem);
+            var files = this.files;
 
-                $('#createPostForm input[name="file_content"]').val += imageUrl;
-                const carousel_post_preview = new bootstrap.Carousel('#carouselCreatePostImage')
-            };
-            reader.readAsDataURL(this.files[0]);
-        });
+            for (var i = 0; i < files.length; i++) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var imageUrl = e.target.result;
+                    var carouselItem = '<div class="carousel-item active"><img src="' + imageUrl +
+                        '" class="d-block w-100" alt="Imagem"></div>';
+                    $('#preview-post-image-create').append(carouselItem);
+                };
+                reader.readAsDataURL(files[i]);
+            }
+    });
 
 // <!--        $('#createPostForm').submit(function (e) {-->
 // <!--            e.preventDefault();-->
@@ -255,23 +256,23 @@
 // <!--            });-->
 // <!--        });-->
     
-            $('#editPostForm').submit(function (e) {
-                e.preventDefault();
-                var formData = new FormData(this);
-                var postSlug = $('#edit-post-slug').val();
-                $.ajax({
-                    url: '/posting/feed/' + postSlug + '/update/',
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-                        window.location.reload();
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                    }
-                });
-            });
+            // $('#editPostForm').submit(function (e) {
+            //     e.preventDefault();
+            //     var formData = new FormData(this);
+            //     var postSlug = $('#edit-post-slug').val();
+            //     $.ajax({
+            //         url: '/posting/feed/' + postSlug + '/update/',
+            //         type: 'POST',
+            //         data: formData,
+            //         processData: false,
+            //         contentType: false,
+            //         success: function (data) {
+            //             window.location.reload();
+            //         },
+            //         error: function (xhr, textStatus, errorThrown) {
+            //         }
+            //     });
+            // });
         });
     </script>
 
