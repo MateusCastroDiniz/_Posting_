@@ -1,3 +1,5 @@
+import os
+
 from django.contrib.auth.decorators import login_required
 from rest_framework.viewsets import ModelViewSet
 from django.shortcuts import render, redirect, get_object_or_404
@@ -16,31 +18,106 @@ class PostViewSet(ModelViewSet):
     queryset = Post.objects.all().order_by('-created_on')
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
+    lookup_field = 'slug'
+
+    # def create(self, request):
+    #     # serializer = PostSerializer(data=request.data)
+    #     #
+    #     # if serializer.is_valid():
+    #     #     image_file = request.FILES.get('image_content')
+    #     #
+    #     #     if image_file:
+    #     #         post_instance = serializer.instance
+    #     #         post_instance.image_content = image_file
+    #     #         post_instance.save()
+    #     #
+    #     #     serializer.save(author=request.user)
+    #     #
+    #     #
+    #     #     return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #     # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    #
+    #     if request.method == 'GET':
+    #         return render(request, 'base.html')
+    #     elif request.method == 'POST':
+    #         file = request.FILES.get('image_content')
+    #
+    #         new_post = Post(author=request.user, text_content=request.POST.get('text_content'), image_content=file)
+    #         new_post.save()
+    #         return Redi
 
     @classmethod
-    @action(detail=True, methods=['post'])
-    def edit_post(cls, request, slug):
-        post = get_object_or_404(Post, pk=Post.objects.get(slug=slug).pk)
-        if post.author == request.user:
-            if request.method == 'POST':
-                form = PostForm(request.POST, instance=post)
-                if form.is_valid():
-                    form.save()
-                    return redirect('feed')
+    @action(detail=False, methods=['POST'])
+    def create_post(self, request):
+
+        if request.method == 'GET':
+            return render(request, 'base.html')
+
+        elif request.method == 'POST':
+            # Acessa os dados do formulário
+            text_content = request.POST.get('text_content')
+            files = request.FILES.getlist('file_content')
+
+            # Cria um dicionário com os dados para passar para o serializer
+            data = {'text_content': text_content}
+
+            # Cria o serializer com os dados
+            serializer = PostSerializer(data=data)
+
+            if serializer.is_valid():
+                # Salva o post
+                post = serializer.save(author=request.user)
+
+                # Se houver arquivos, associe-os ao post
+                if files:
+                    for f in files:
+                        PostFile.objects.create(post=post, arq_content=f)
+
+                return redirect('feed')
             else:
-                form = PostForm(instance=post)
-                return render(request, 'edit_post.html', {'form': form})
-        else:
+                # Se o serializer não for válido, retorne uma resposta de erro
+                return render(request, 'error.html', {'errors': serializer.errors})
+
+
+
+    def update(self, request, *args, **kwargs):
+        post = get_object_or_404(self.queryset, **kwargs)
+        serializer = PostSerializer(post, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+    def retrieve(self, request, *args, **kwargs):
+        if request.method == 'GET':
+            post = get_object_or_404(self.queryset, **kwargs)
+            serializer = PostSerializer(post)
+            return Response(serializer.data)
+
+    # def destroy(self, request, slug):
+    #     if request.method == 'POST':
+    #         post = Post.objects.get(slug=slug)
+    #         post.delete()
+    #         return redirect('feed')
+
+    @classmethod
+    @action(detail=True, methods=['post'])    
+    def delete_post(self, request, slug):
+        if request.method == 'POST':
+            post = Post.objects.get(slug=slug)
+            post.delete()
             return redirect('feed')
 
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        if instance.author == request.user:
-            self.perform_destroy(instance)
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        else:
-            return Response({"message": "You don't have permission to delete this post."},
-                            status=status.HTTP_403_FORBIDDEN)
+    @action(detail=True, methods=['post'])
+    def update_post(self, request, slug=None):
+        post = self.get_object()
+        serializer = self.get_serializer(post, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return redirect('feed')
+        return render(request, 'feed.html', {})
+            
 
 
 @login_required

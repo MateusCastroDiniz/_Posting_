@@ -1,11 +1,17 @@
+import os
 import re
+
+from django.core.files.base import File, ContentFile
 from django.db import models
 from django.core import validators
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+
+from core import settings
 from core.settings import DATETIME_FORMAT
+from core.settings import MEDIA_ROOT
 
 SEX_CHOICE = (
     ('M', 'Male'),
@@ -66,7 +72,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     email = models.EmailField(_('email address'), max_length=255, unique=True)
 
-    avatar = models.FileField(upload_to='avatars', blank=True)
+    avatar = models.FileField(upload_to='avatars', blank=True, null=True)
 
     sex = models.CharField(_('sex'), choices=SEX_CHOICE, default='U', max_length=1)
 
@@ -84,6 +90,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['complete_name', 'birthday', 'username']
     objects = UserManager()
+
+    def save(self, *args, **kwargs):
+        if not self.avatar:
+            default_avatar_path = os.path.join('default-avatars', 'default-avatar.png')
+            self.avatar.name = default_avatar_path
+            super().save(*args, **kwargs)
+
+
 
     class Meta:
         verbose_name = _('user')

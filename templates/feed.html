@@ -3,76 +3,194 @@
 {% block content %}
 
 {% for post in feed %}
-<!--    <li>-->
-<!--        {{post.author}}<br>-->
-<!--        {{post.text_content}}-->
-<!--        {{post.comments}}-->
-<!--    </li>-->
-
-<div class="card rounded-4">
-    <div class="card-header d-flex flex-row align-items-center justify-content-between ">
-        <div class="user_info d-flex flex-row align-items-center gap-3 ">
+<div class="card rounded-4 my-3">
+    <div class="card-header d-flex flex-row align-items-center justify-content-between">
+        <div class="user_info d-flex flex-row align-items-center gap-3">
+            {% if post.author_avatar %}
             <div id="avatar-post-container">
                 <img id='avatar' src="{{ post.author_avatar }}" alt="Avatar">
             </div>
+            {% endif %}
             <p class="fs-5 fw-regular p-0 m-0">{{ post.author_username }}</p>
         </div>
         {% if post.author_username == user.username %}
         <div class="float-end">
-            <a><button class="btn bi bi-three-dots-vertical border-1" data-bs-toggle="modal"
-                    data-bs-target="#editPostModal"></button></a>
+            <button class="btn bi bi-three-dots-vertical border-1 dropdown-toggle" data-bs-toggle="dropdown"
+                aria-expanded="false"></button>
+            <ul class="dropdown-menu">
+                <li class="dropdown-item d-flex">
+
+                    <button id="deletePost"
+                        class="btn btn-danger bi bi-trash3 border-1 d-flex flex-row-reverse align-items-center w-100"
+                        data-post-delete-slug="{{post.slug}}">
+                        <p class="m-0 me-2 p-0">Delete Post</p>
+                    </button>
+                </li>
+                <li class="dropdown-item">
+                    <button
+                        class="btn btn-secondary bi bi-pencil border-1 edit-post-btn d-flex flex-row-reverse align-items-center w-100"
+                        data-bs-toggle="modal" data-bs-target="#editPostModal" data-post-slug="{{ post.slug }}" data-file-content="{% for file in post.files %}{{file.arq_content}} {%endfor%}"
+                        data-text-content="{{ post.text_content }}">
+                        <p class="m-0 me-2 p-0">Edit Post</p>
+                    </button>
+                </li>
+            </ul>
         </div>
-        {% endif%}
+        {% endif %}
     </div>
     <div class="card-body">
         {{ post.text_content }}
 
-        {% if post.image_content%}
-        <img class="post_image rounded-2 mt-4" src="{{ post.image_content}}">
-        {% endif %}
+        <div id="{{post.slug}}-carousel" class="carousel slide rounded-2" data-bs-ride="carousel">
+            <div class="carousel-inner rounded-2">
+                {% for image in post.files %}
+                <img class="carousel-item active post_image rounded-2 mt-4" src="{{ image.arq_content }}">
+                {% endfor%}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#{{post.slug}}-carousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#{{post.slug}}-carousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Próximo</span>
+            </button>
+        </div>
     </div>
 </div>
+{% endfor %}
+
 
 <div class="modal fade" id="editPostModal" tabindex="-1" aria-labelledby="editPostModalLabel" aria-hidden="true">
-    <form id="editPostForm" method="POST" action="{% url 'edit_post' post.slug%}">
+    <form id="editPostForm" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        <input type="hidden" name="post_id" id="post_id" value="">
+        <input type="hidden" id="edit-post-slug" name="slug">
         <div class="modal-dialog modal-lg border-0">
-            <div class="modal-content">
+            <div class="modal-content container">
                 <div class="modal-header d-flex flex-row justify-content-between">
                     <button type="button" class="btn m-0 p-1" data-bs-dismiss="modal" aria-label="Close"><i
                             class="bi bi-x fs-5 m-0 p-0"></i></button>
-                    <h5 class="modal-title" id="editPostModalLabel">Editar Post</h5>
+                    <h5 class="modal-title" id="editPostModalLabel">Edit Post</h5>
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>
-                <div class="modal-body">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="text_content" id="text_content"
-                                        aria-describedby="basic-addon3 basic-addon4" value="{{post.text_content}}">
+                <div class="modal-body row d-flex flex-row flex-nowrap">
+
+                    <div class="mb-3 col-6 position-relative">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="text_content" id="text_content"
+                                aria-describedby="basic-addon3 basic-addon4">
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center p-0" style="height: 150px; width: 1px;">
+                        <div class="vr"></div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="image_container_edit position-relative">
+                            <div id="carousel-post-files" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner" id="preview-post-file-edit">
+
                                 </div>
-                                <div class="form-text" id="basic-addon4">Example help text goes outside the input group.
-                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carousel-post-files"
+                                    data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carousel-post-files"
+                                    data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
                             </div>
-                            <div class="">
-                                <div class="image_container_edit position-relative">
-                                    <button type="button"
-                                        class="btn btn-light position-absolute rounded-pill top-0 end-0 m-3 remove_img_btn"
-                                        data-bs-dismiss="modal" aria-label="Close"><i class="bi bi-x fs-6 m-0"></i></button>
-                                    <img class="post_image rounded-2 m-auto" id="image_content" src="{{post.image_content}}">
-                                </div>
-                            </div>
+
+
                         </div>
                     </div>
                 </div>
+                <label for="uploadFileInput" class="btn btn-primary position-absolute bottom-0 end-0 m-3">
+                    <i class="bi bi-image"></i>
+                    <input type="file" id="uploadFileInput" name="files" style="display: none;">
+                </label>
             </div>
         </div>
     </form>
 </div>
 
 
-{% endfor %}
 
-{% endblock content%}
+
+<script>
+    $(document).ready(function () {
+
+
+        $('.edit-post-btn').click(function () {
+            $('#preview-post-file-edit').empty();
+            var postSlug = $(this).data('post-slug');
+            var textContent = $(this).data('text-content');
+            var fileContent = $(this).data('file-content').split(' ');
+            
+            $('#edit-post-slug').val(postSlug);
+            $('#text_content').val(textContent);
+
+            fileContent.forEach(function (fileUrl) {
+                if (fileUrl.toLowerCase().endsWith('.jpg') || fileUrl.toLowerCase().endsWith('.jpeg') || fileUrl.toLowerCase().endsWith('.png')) {
+                    var carouselItem = '<div class="carousel-item active"><img src="' + fileUrl +
+                        '" class="d-block w-100" alt="Imagem"></div>';
+                    $('#preview-post-file-edit').append(carouselItem);
+            }});
+        });
+
+        $('#uploadFileInput').change(function () {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var fileUrl = e.target.result;
+                var carouselItem = '<div class="carousel-item active"><img src="' + fileUrl +
+                    '" class="d-block w-100" alt="Imagem"></div>';
+                $('#preview-post-file-edit').append(carouselItem);
+
+                $('#file_content').attr('src', fileUrl);
+            };
+            reader.readAsDataURL(this.files[0]);
+        });
+
+        $('#editPostForm').submit(function (e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            var postSlug = $('#edit-post-slug').val();
+            $.ajax({
+                url: '/posting/feed/' + postSlug + '/update/',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    window.location.reload();
+                },
+                error: function (xhr, textStatus, errorThrown) {}
+            });
+        });
+
+        $('#deletePost').on('click', function (e) {
+            e.preventDefault();
+
+            var PostSlugdelete = $(this).data('post-delete-slug')
+
+            $.ajax({
+                url: '/posting/feed/' + PostSlugdelete + '/delete',
+                type: 'POST',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function (data) {
+                    window.location.reload();
+                },
+                error: function (xhr, textStatus, errorThrown) {}
+            })
+
+
+        })
+    });
+</script>
+
+{% endblock content %}

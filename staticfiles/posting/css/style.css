@@ -12,7 +12,7 @@
   display: none; }
 
 small.text-muted {
-  color: #f00 !important; }
+  color: blue !important; }
 
 #avatar-container{
   position: relative;
@@ -34,7 +34,7 @@ small.text-muted {
   width: 100%;
 }
 
-#avatar-profile-container{
+#avatar-user-container{
   position: relative;
   width: 200px;
   height: 200px;
@@ -42,15 +42,23 @@ small.text-muted {
   overflow: hidden;
 }
 
-#avatar-profile{
+#avatar-user{
   width: 100%;
 }
 
-
 #texto{
-  color:#f00
+  color:#f00;
 }
 
 .post_image{
   width: 100%;
+}
+
+.remove_img_btn{
+  padding: 10px;
+  border-radius: 50%;
+}
+
+#texto_teste{
+  font-size: 10rem !important;
 }
