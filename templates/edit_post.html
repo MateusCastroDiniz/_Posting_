@@ -1,16 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<!-- {% extends 'base.html' %}
+{% block content %}
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Salvar</button>
-</form>
+<div class="modal fade" id="createPostModal" tabindex="-1" aria-labelledby="createPostModalLabel" aria-hidden="true">
+    <form id="createPostForm" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="post_id" id="post_id" value="">
+        <div id="modal-post-creation" class="modal-dialog modal-lg border-0">
+            <div class="modal-content">
+                <div class="modal-header d-flex flex-row justify-content-between">
+                    <button type="button" class="btn m-0 p-1" data-bs-dismiss="modal" aria-label="Close"><i
+                            class="bi bi-x fs-5 m-0 p-0"></i></button>
+                    <h5 class="modal-title" id="createPostModalLabel">New Post</h5>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+                <div class="modal-body">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="text_content" id="text_content"
+                                        aria-describedby="basic-addon3 basic-addon4" value="{{post.text_content}}"
+                                        placeholder='"Hi there..."'>
+                                </div>
+                            </div>
+                        </div>
+                        {% if post.image_content%}
+                        <div class="">
+                            <div class="image_container_edit position-relative">
+                                <button type="button"
+                                    class="btn btn-light position-absolute rounded-pill top-0 end-0 m-3 remove_img_btn"
+                                    aria-label="Close"><i class="bi bi-x fs-6 m-0"></i></button>
+                                <img class="post_image rounded-2 m-auto" id="image_content"
+                                    src="{{ post.image_content }}">
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 
-</body>
-</html>
+
+{% endblock content %} -->

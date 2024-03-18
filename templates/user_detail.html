@@ -1,0 +1,68 @@
+{% extends 'base.html'%}
+
+{% block content %}
+
+<div class="col d-flex flex-column flex-md-column align-items-md-start align-items-center">
+    {% if user.avatar.url %}
+    <div id="avatar-user-container">
+        <img id='avatar-user' src="{{ user.avatar.url }}" alt="Avatar">
+    </div>
+    {% endif %}
+    <div class="d-flex flex-column">
+        <div class="d-flex flex-row align-items-center gap-2">
+            <h2>{{ username }}</h2>
+            <a id="btn-editar-perfil" data-bs-toggle="modal" style="height: 25px !important;" data-bs-target="#editar_usuario_modal"
+                class="btn btn-sm btn-outline-secondary py-0 rounded-pill">Editar perfil</a>
+            <!-- <a class="btn dropdown-item border-1" data-bs-toggle="modal"
+data-bs-target="#createPostModal"> New Post</a> -->
+        </div>
+        <div class="f-flex flex-column">
+            <p>Followers: {{ num_followers }}</p>
+            <p>Following: {{ num_following }}</p>
+            <a class="btn btn-outline-danger rounded-pill" href="{% url 'logout' %}">sair</a>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="editar_usuario_modal" tabindex="-1" aria-labelledby="editar_usuario_modal_label"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editar_usuario_modal_label">Editar Usuário</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="edituserForm" method="POST" action="{%url 'user_edit'%}">
+                    {% csrf_token %}
+                    
+                    {% if user_avatar %}
+                    <div id="avatar-user-container">
+                        <img id='avatar-user' src="{{ user_avatar }}" alt="Avatar">
+                    </div>
+                    {% else %}
+                    <p>No avatar available</p>
+                    {% endif %}
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-danger" id="removeAvatarBtn">Remove Avatar</button>
+                    </div>
+                    <div class="mb-3">
+                        <label for="avatarUpload" class="form-label">Mudar foto de perfil</label>
+                        <input type="file" class="form-control" id="avatarUpload" name="avatarUpload">
+                    </div>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username"
+                            value="{{ user.username }}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

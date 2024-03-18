@@ -1,0 +1,187 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+    <meta name="google" content="notranslate" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'posting/css/style.css' %}">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <header class="mb-4">
+        <div class="container">
+            <div class="row row-header d-flex align-items-center">
+                <div class="col-3">
+                    <a class="text-decoration-none fs-1 fw-bold text-dark" href="">Posting</a>
+                </div>
+                <div class="col-9 float-end d-flex justify-content-end mt-3">
+                    <div class="button-group columns ">
+                        <a class="btn btn-primary rounded-pill" href="{% url 'login' %}">Sing in</a>
+                        <a id="registration_btn" class="btn btn-primary rounded-pill" href="{% url 'register.html'%}">Sing up</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header> -->
+
+    <!-- <div class="container">
+        <div class="row align-items-center">
+            <div class="col-12 d-flex">
+                {% if error_message %}
+                {{ error_message }}
+                {% endif %}
+
+                   <h2>Login</h2>-->
+                <!--    <form method="post">-->
+                <!--        {% csrf_token %}-->
+                <!--        {{ form.as_p }}-->
+                <!--        <button type="submit">Login</button>-->
+                <!--    </form>
+
+                <div class="modal fade" id="loginModal" aria-hidden="true" aria-labelledby="loginModalLabel"
+                    tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="loginModalLabel">Login</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <label for="email_login" class="form-label">Email address</label>
+                                        <input type="email" class="form-control" id="email_login" name="email"
+                                            placeholder="email@example.com">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="password_login" class="form-label">Password</label>
+                                        <input type="password" class="form-control" id="password_login" name="password"
+                                            placeholder="Password">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary rounded-pill">Sign in</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-primary rounded-pill">New around here? Sign up</a>
+                                <a href="#" class="btn btn-primary rounded-pill">Forgot password?</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="modal fade" id="registerModal" aria-hidden="true" aria-labelledby="registerModal"
+                    tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="registerModellabel">Register</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body" id="start_registration">
+
+                                <div class="progress my-2" role="progressbar" aria-label="Example 1px high"
+                                    aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="height: 7px">
+                                    <div class="progress-bar" style="width: 0%"></div>
+                                </div>
+
+                                <div class="container d-flex flex-column justify-content-center align-items-center">
+                                    <p class=" fs-3">Vamos começar?</p>
+                                    <button id="startStep_btn" type="button" class="btn btn-primary rounded-pill"
+                                        onclick="StartRegistration()">Next</button>
+                                </div>
+
+                            </div>
+
+
+                            <div class="modal-body" id="step1">
+
+                                <div class="progress my-2" role="progressbar" aria-label="Example 1px high"
+                                    aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="height: 7px">
+                                    <div class="progress-bar" style="width: 50%"></div>
+                                </div>
+
+                                <form id="formStep1">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <label for="first_name" class="form-label">First name</label>
+                                        <input type="text" class="form-control" id="first_name" name="first_name"
+                                            placeholder="Insert your first name" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="last_name" class="form-label">Last name</label>
+                                        <input type="text" class="form-control" id="last_name" name="last_name"
+                                            placeholder="Insert your last name" required>
+                                    </div>
+                                    <button id="nextStep_btn" type="button" class="btn btn-primary rounded-pill"
+                                        onclick="nextStep()">Next</button>
+                                </form>
+                            </div>
+                            <div class="modal-body" id="step2">
+
+                                <div class="progress my-2" role="progressbar" aria-label="Example 1px high"
+                                    aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="height: 7px">
+                                    <div class="progress-bar" style="width: 100%"></div>
+                                </div>
+
+                                <form id="formStep2">
+                                    <div class="mb-3">
+                                        <label for="email_register" class="form-label">Email address</label>
+                                        <input type="email" class="form-control" id="email_register" name="email"
+                                            placeholder="email@example.com" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">Password</label>
+                                        <input type="password" class="form-control" id="password" name="password"
+                                            placeholder="Password" required>
+                                    </div>
+                                    <div id="btn_actions">
+                                        <button id="prevStep_btn" type="button"
+                                            class="btn btn-secondary rounded-pill" onclick="prevStep()">Back</button>
+                                        <button type="submit" class="btn btn-primary rounded-pill">Sign up</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="modal-footer d-none">
+                                                               <button id="prevStep_btn" style="display:none" type="button" class="btn btn-secondary" onclick="prevStep()">Back</button>-->
+                                <!--                                <button id="nextStep_btn" type="button" class="btn btn-primary" onclick="nextStep()">Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div> -->
+
+    <!-- <footer>
+        <div class="container d-absolute bottom-0 align-items-center text-center">
+            <p class="fs-6 fw-light">powered by Mateus Diniz</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    </script>
+    
+    <script src="{% static 'posting/js/**'%}"></script>
+    <script src="{% static 'posting/js/actions.js' %}"></script>
+    <script src="{% static 'posting/js/jquery.js' %}"></script>
+
+</body>
+
+</html> -->

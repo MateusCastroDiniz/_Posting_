@@ -1,30 +1,69 @@
-{% extends 'base.html'%} {% block content %}
-{% for post in feed %}
-            <a href="{% url 'post_detail' post.slug%}">
-                    <div class="card m-3">
-                      <div class="card-header">
-                        <h1>{% block title %} {{ post.author_username }} {% endblock title %}</h1>
-                      </div>
-                      <div class="card-body">
-                        <p class=" text-muted">{{ post.author_username }} | {{ post.created_on }}</p>
-                        <p class="card-text ">{{ post.text_content }}</p>
-                        {% if post.image_content %}
-                          {{ post.image_content }}
-                        {% endif%}
+{% extends 'base.html'%}
 
-                      </div>
-                      <div class="card-footer">
+{% block content %}
+    {% for post in feed %}
+        <div class="card rounded-4 my-3">
+    <div class="card-header d-flex flex-row align-items-center justify-content-between ">
+    <div class="user_info d-flex flex-row align-items-center gap-3 ">
+        {% if post.author_avatar %}
+        <div id="avatar-post-container">
+            <img id='avatar' src="{{ post.author_avatar }}" alt="Avatar">
+        </div>
+        {% endif %}
+        <p class="fs-5 fw-regular p-0 m-0">{{ post.author_username }}</p>
+    </div>
+    {% if post.author_username == user.username %}
+    <div class="float-end">
+        <a><button class="btn bi bi-three-dots-vertical border-1" data-bs-toggle="modal"
+                data-bs-target="#editPostModal"></button></a>
+    </div>
+    {% endif%}
+    </div>
+    <div class="card-body">
+    {{ post.text_content }}
 
-<!--                          {% for comment in comments %}-->
-<!--                             {% if comment.post.id == post.id %}-->
-<!--                                  {{ comment.created_by }}-->
-<!--                                  {{ comment.content }}-->
-<!--                              {%endif%}-->
+    {% if post.image_content%}
+    <img class="post_image rounded-2 mt-4" src="{{ post.image_content}}">
+    {% endif %}
+    </div>
+    </div>
 
-<!--                          {% endfor %}-->
-
-                      </div>
+        <div class="modal fade" id="editPostModal" tabindex="-1" aria-labelledby="editPostModalLabel" aria-hidden="true">
+    <form id="editPostForm" method="POST" action="{% url 'edit_post' post.slug%}">
+        {% csrf_token %}
+        <input type="hidden" name="post_id" id="post_id" value="">
+        <div class="modal-dialog modal-lg border-0">
+            <div class="modal-content">
+                <div class="modal-header d-flex flex-row justify-content-between">
+                    <button type="button" class="btn m-0 p-1" data-bs-dismiss="modal" aria-label="Close"><i
+                            class="bi bi-x fs-5 m-0 p-0"></i></button>
+                    <h5 class="modal-title" id="editPostModalLabel">Editar Post</h5>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+                <div class="modal-body">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="text_content" id="text_content"
+                                        aria-describedby="basic-addon3 basic-addon4" value="{{post.text_content}}">
+                                </div>
+                                <div class="form-text" id="basic-addon4">Example help text goes outside the input group.
+                                </div>
+                            </div>
+                            <div class="">
+                                <div class="image_container_edit position-relative">
+                                    <button type="button" class="btn btn-light position-absolute rounded-pill top-0 end-0 m-3 remove_img_btn" aria-label="Close"><i class="bi bi-x fs-6 m-0"></i></button>
+                                    <img class="post_image rounded-2 m-auto" id="image_content" src="{{ post.image_content }}">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-            </a>
-        {% endfor %}
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+    {% endfor %}
 {% endblock content%}
