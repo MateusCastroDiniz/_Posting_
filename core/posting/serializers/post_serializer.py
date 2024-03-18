@@ -29,7 +29,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.text_content = validated_data.get('text_content', instance.text_content)
-        instance.image_content = validated_data.get('image_content', instance.image_content)
+        instance.image_content = validated_data.get('files', instance.files)
         instance.save()
         return instance
 
