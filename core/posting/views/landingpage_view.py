@@ -5,3 +5,4 @@ from ..models.user import User
 
 def landingpage_view(request):
     return render(request, 'base.html')
+        
