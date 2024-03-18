@@ -15,26 +15,59 @@ class UserViewSet(viewsets.ModelViewSet):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
+    # @action(detail=False, methods=['POST'])
+    # def edit_user(self, request):
+    #     user = get_object_or_404(User, pk=User.objects.get(pk=request.user.id).pk)
+    #     if request.method == 'POST':
+    #         username = request.POST.get('username')
+    #         avatar = request.FILES.get('avatarUpload')  # Corrigido para corresponder ao nome do campo no formulário
+
+    #         new_username = username
+    #         if User.objects.exclude(pk=user.pk).filter(username=new_username).exists():
+    #             messages.error(request, 'O username já está em uso. Escolha outro.')
+    #             return redirect('edit_user', pk=request.user.pk)
+    #         else:
+    #             user.username = new_username
+
+    #         if avatar:
+    #             if user.avatar.path != '/media/default-avatars/default-avatar.png':
+    #                 os.remove(user.avatar.path)
+    #             user.avatar = avatar
+
+    #         user.save()
+    #         return redirect('user')
+    #     else:
+    #         return render(request, 'edit_user.html', {'user': user})
     @classmethod
-    @action(detail=True, methods=['post'])
-    def edit_user(cls, request):
+    @action(detail=False, methods=['post'])
+    def edit_user(self, request):
         user = get_object_or_404(User, pk=request.user.pk)
+
         if request.method == 'POST':
             form = UserForm(request.POST, request.FILES, instance=user)
-            if form.is_valid():
-                new_username = form.cleaned_data['username']
-                if User.objects.exclude(pk=user.pk).filter(username=new_username).exists():
-                    messages.error(request, 'O username já está em uso. Escolha outro.')
-                    return redirect('edit_user', pk=request.user.pk)
 
-                old_avatar_path = request.user.avatar.path if request.user.avatar else None  # Obtenha o caminho do arquivo antigo, se existir
-                if old_avatar_path and os.path.isfile(old_avatar_path):
-                    os.remove(old_avatar_path)  # Excluir o avatar antigo
-                form.save()
-                return redirect('profile')
+        if form.is_valid():
+            new_username = form.cleaned_data['username']
+            
+            if User.objects.exclude(pk=user.pk).filter(username=new_username).exists():
+                messages.error(request, 'O username já está em uso. Escolha outro.')
+                return redirect('edit_user')
+
+            if request.FILES.get('avatar'):
+                new_avatar = request.FILES.get('avatar')
+                if user.avatar.path != '/media/default-avatars/default-avatar.png':
+                    os.remove(user.avatar.path)
+                user.avatar = new_avatar
+
+            form.save()
+            return redirect('user')
         else:
             form = UserForm(instance=user)
+        
         return render(request, 'edit_user.html', {'form': form})
+
+
+
 
     @classmethod
     @action(detail=True, methods=['post'])
@@ -71,8 +104,8 @@ class UserViewSet(viewsets.ModelViewSet):
 @login_required
 def user_config(request):
     user = request.user
-    user_posts = Post.objects.filter(author=User.objects.get(id=request.user.pk))
-    user_avatar = User.objects.get(id=user.id).avatar
+    user_posts = Post.objects.filter(author=User.objects.get(id=request.user.pk)) # !!! Já está aqui! Não reinvente a roda!
+    user_avatar = User.objects.get(id=user.pk).avatar.url
     followers = list(map(lambda x: x.follower.username, Relation.objects.filter(followed=User.objects.get(pk=request.user.pk))))
     following = list(map(lambda x: x.followed.username, Relation.objects.filter(follower=User.objects.get(pk=request.user.pk))))
     num_followers = len(followers)
@@ -88,4 +121,4 @@ def user_config(request):
             'user_posts': user_posts,
             'user_avatar': user_avatar
     }
-    return render(request, 'profile.html', context)
+    return render(request, 'user_detail.html', context)
