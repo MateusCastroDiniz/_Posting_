@@ -8,6 +8,10 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ['usename']
     list_filter = ('is_staff',)
 
+@admin.register(PostFile)
+class PostFileAdmin(admin.ModelAdmin):
+    list_display = ('post', 'arq_content', 'selected_on',)
+
 
 class CommentInline(admin.TabularInline):
     model = Comment
