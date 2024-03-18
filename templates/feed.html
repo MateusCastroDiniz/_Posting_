@@ -110,7 +110,7 @@
                 </div>
                 <label for="uploadFileInput" class="btn btn-primary position-absolute bottom-0 end-0 m-3">
                     <i class="bi bi-image"></i>
-                    <input type="file" id="uploadFileInput" style="display: none;">
+                    <input type="file" id="uploadFileInput" name="files" style="display: none;">
                 </label>
             </div>
         </div>
@@ -129,7 +129,6 @@
             var postSlug = $(this).data('post-slug');
             var textContent = $(this).data('text-content');
             var fileContent = $(this).data('file-content').split(' ');
-            alert(fileContent)
             
             $('#edit-post-slug').val(postSlug);
             $('#text_content').val(textContent);
