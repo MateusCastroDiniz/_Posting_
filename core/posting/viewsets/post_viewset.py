@@ -54,39 +54,20 @@ class PostViewSet(ModelViewSet):
             return render(request, 'base.html')
 
         elif request.method == 'POST':
-            # Acessa os dados do formulário
             text_content = request.POST.get('text_content')
             files = request.FILES.getlist('file_content')
-
-            # Cria um dicionário com os dados para passar para o serializer
             data = {'text_content': text_content}
-
-            # Cria o serializer com os dados
             serializer = PostSerializer(data=data)
 
             if serializer.is_valid():
-                # Salva o post
                 post = serializer.save(author=request.user)
-
-                # Se houver arquivos, associe-os ao post
                 if files:
                     for f in files:
                         PostFile.objects.create(post=post, arq_content=f)
 
                 return redirect('feed')
             else:
-                # Se o serializer não for válido, retorne uma resposta de erro
                 return render(request, 'error.html', {'errors': serializer.errors})
-
-
-
-    def update(self, request, *args, **kwargs):
-        post = get_object_or_404(self.queryset, **kwargs)
-        serializer = PostSerializer(post, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
     def retrieve(self, request, *args, **kwargs):
@@ -108,16 +89,26 @@ class PostViewSet(ModelViewSet):
             post = Post.objects.get(slug=slug)
             post.delete()
             return redirect('feed')
+        return render(request, 'feed.html')
 
     @action(detail=True, methods=['post'])
     def update_post(self, request, slug=None):
         post = self.get_object()
-        serializer = self.get_serializer(post, data=request.data)
+        serializer = self.get_serializer(post, data=request.POST)
         if serializer.is_valid():
             serializer.save()
             return redirect('feed')
-        return render(request, 'feed.html', {})
-            
+        return render(request, 'feed.html')
+
+    @action(detail=True, methods=['post'])
+    def delete_file_post(self, request, id=None):
+        if request.method == 'POST':
+            image = PostFile.objects.get()
+
+
+    def create_file_post(self,request, sla):
+        if request.method == 'POST':
+            img = PostFile.object.create(post=post_id, arq_content=sla)
 
 
 @login_required
