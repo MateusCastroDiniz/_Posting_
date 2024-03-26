@@ -22,6 +22,6 @@ from django.conf import settings
 urlpatterns = [
     path("admin/", admin.site.urls),
     re_path("posting/", include('core.posting.urls')),
-    path('login/', include('core.posting.auth_urls')),
+    path('user/', include('core.posting.user_urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
