@@ -1,12 +1,9 @@
 from rest_framework import serializers
 from core.posting.models import User
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated
-
+from .profile_picture_serializer import ProfilePictureSerializer
 
 class UserSerializer(serializers.ModelSerializer):
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
-    permission_classes = [IsAuthenticated]
+    profile_picture = ProfilePictureSerializer(read_only=True, many=False)
 
     class Meta:
         model = User
@@ -16,19 +13,13 @@ class UserSerializer(serializers.ModelSerializer):
             'email',
             'birthday',
             'sex',
-            'avatar'
+            'profile_picture'
         ]
 
-    def create(self, validated_data):
-        return User.objects.create(**validated_data)
-
-    def update_user(self, instance, validated_data):
-        instance.complete_name = validated_data.get('complete_name', instance.complete_name)
+    def update(self, instance, validated_data):
         instance.username = validated_data.get('username', instance.username)
-        instance.sex = validated_data.get('sex', instance.sex)
+        instance.complete_name = validated_data.get('complete_name', instance.complete_name)
         instance.email = validated_data.get('email', instance.email)
-        instance.avatar = validated_data.get('avatar', instance.avatar)
-        instance.brithday = validated_data.get('birthday', instance.brithday)
-        instance.avatar = validated_data.get('avatar', instance.avatar)
+        instance.profile_picture = validated_data.get('profile_picture', instance.profile_picture)
         instance.save()
         return instance

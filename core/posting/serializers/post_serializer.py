@@ -1,14 +1,15 @@
 from rest_framework import serializers
-from core.posting.models import Post
+from core.posting.models import Post, PostFile
 from .comment_serializer import CommentSerializer
 from .post_file_serializer import PostFileSerializer
+from .user_serializer import UserSerializer
 
 
 class PostSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(read_only=True, many=True)
     files = PostFileSerializer(read_only=True, many=True)
     author_username = serializers.ReadOnlyField(source='author.username')
-    author_avatar = serializers.ReadOnlyField(source='author.avatar.url')
+    profile_picture = serializers.ReadOnlyField(source='author.profile_picture.profile_picture.url')
 
     class Meta:
         model = Post
@@ -21,7 +22,7 @@ class PostSerializer(serializers.ModelSerializer):
             'files',
             'slug',
             'comments',
-            'author_avatar'
+            'profile_picture'
         ]
 
     def create(self, validated_data):
@@ -29,7 +30,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.text_content = validated_data.get('text_content', instance.text_content)
-        instance.image_content = validated_data.get('files', instance.files)
+        PostFile.objects.filter(post=instance).update(arq_content=validated_data.get('files', instance.files))
         instance.save()
         return instance
 
