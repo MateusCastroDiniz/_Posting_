@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
-from .viewsets import user_viewset,post_viewset,comment_viewset
+from .viewsets import user_viewset, post_viewset,comment_viewset
 from .viewsets import *
 from .viewsets.post_viewset import *
 from .views import *
@@ -20,15 +20,12 @@ urlpatterns = [
     path('', include(UserRouter.urls)),
     path('', landingpage_view, name=''),
     path('user/', user_viewset.user_config, name='user'),
-    path('user/edit', UserViewSet.edit_user, name='user_edit'),
+    path('user/edit/<str:username>', user_viewset.edit_user, name='edit_user'),
+    path('user/edit/remove_profipic/', user_viewset.delete_profile_picture, name='remove_profipic'),
     path('feed/explore', explore_list, name='explore'),
     path('feed/', post_list, name='feed'),
     path('feed/p/<slug:slug>/', PostDetail.as_view(), name='post_detail'),
     path('feed/create/', PostViewSet.create_post, name='create_post'),
-    path('feed/<slug:slug>/edit/', edit_post_view, name='edit_post'),
     path('feed/<slug:slug>/update/', PostViewSet.as_view({'post': 'update_post'}), name='update_post'),
-    path('feed/<slug:slug>/delete', PostViewSet.delete_post, name='delete_post'),
-    # path('feed/<slug:slug>/update', PostViewSet.as_view({'put': 'update'}), name='update_post')
-    # path('feed/create', PostViewSet.create_post, name='create_post'),
-    # path('feed/<slug:slug>/edit', PostViewSet.edit_post, name='edit_post')
+    path('feed/<slug:slug>/delete/', PostViewSet.delete_post, name='delete_post'),
 ]
