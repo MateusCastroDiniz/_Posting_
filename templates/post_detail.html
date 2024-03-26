@@ -3,32 +3,61 @@
 
 <title> {{ post.author.username}}'s post</title>
 
-<div class="container my-3">
-  <a href="{% url 'feed'%}" class="text-muted"><i class="bi bi-arrow-left mx-0"></i> Voltar ao feed</a>
-  <div class="row mt-3">
-    <div class="col-md-8 card mb-4  mt-0 left p-0 top">
-      <div class="card-header">
-        <h1>{% block title %} {{ post.author.username }} {% endblock title %}</h1>
-      </div>
-      <div class="card-body">
-        <p class=" text-muted">{{ post.author }} | {{ post.created_on }}</p>
-        <p class="card-text ">{{ post.text_content }}</p>
-        {% if post.image_content%}
-          {{ post.image_content }}
-        {% endif%}
+<div class="card rounded-4 my-3">
+    <div class="card-header d-flex flex-row align-items-center justify-content-between">
+        <div class="user_info d-flex flex-row align-items-center gap-3">
+            {% if post.author_profile_picture %}
+            <div id="profile-picture-post-container">
+                <img id='profile-picture' src="{{ post.author_profile_picture }}" alt="Author profile picture">
+            </div>
+            </div>
+            {% endif %}
+            <p class="fs-5 fw-regular p-0 m-0">{{ post.author_username }}</p>
+        </div>
+        {% if post.author_username == user.username %}
+        <div class="float-end">
+            <button class="btn bi bi-three-dots-vertical border-1 dropdown-toggle" data-bs-toggle="dropdown"
+                aria-expanded="false"></button>
+            <ul class="dropdown-menu">
+                <li class="dropdown-item d-flex">
 
-      </div>
-      <div class="card-footer">
-          {% for comment in comments %}
-             {% if comment.post.id == post.id %}
-                  {{ comment.created_by }}
-                  {{ comment.content }}
-              {%endif%}
-          {% endfor %}
-
-      </div>
+                    <button id="deletePost"
+                        class="btn btn-danger bi bi-trash3 border-1 d-flex flex-row-reverse align-items-center w-100"
+                        data-post-delete-slug="{{post.slug}}">
+                        <p class="m-0 me-2 p-0">Delete Post</p>
+                    </button>
+                </li>
+                <li class="dropdown-item">
+                    <button
+                        class="btn btn-secondary bi bi-pencil border-1 edit-post-btn d-flex flex-row-reverse align-items-center w-100"
+                        data-bs-toggle="modal" data-bs-target="#editPostModal" data-post-slug="{{ post.slug }}" data-file-content="{% for file in post.files %}{{file.arq_content}} {%endfor%}"
+                        data-text-content="{{ post.text_content }}">
+                        <p class="m-0 me-2 p-0">Edit Post</p>
+                    </button>
+                </li>
+            </ul>
+        </div>
+        {% endif %}
     </div>
-  </div>
+    <div class="card-body">
+        {{ post.text_content }}
+
+        <div id="{{post.slug}}-carousel" class="carousel slide rounded-2" data-bs-ride="carousel">
+            <div class="carousel-inner rounded-2">
+                {% for image in post.files %}
+                <img class="carousel-item active post_image rounded-2 mt-4" src="{{ image.arq_content }}">
+                {% endfor%}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#{{post.slug}}-carousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#{{post.slug}}-carousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Próximo</span>
+            </button>
+        </div>
+    </div>
 </div>
 
 {% endblock content %}

@@ -3,12 +3,13 @@
 {% block content %}
 
 {% for post in feed %}
+
 <div class="card rounded-4 my-3">
     <div class="card-header d-flex flex-row align-items-center justify-content-between">
         <div class="user_info d-flex flex-row align-items-center gap-3">
-            {% if post.author_avatar %}
-            <div id="avatar-post-container">
-                <img id='avatar' src="{{ post.author_avatar }}" alt="Avatar">
+            {% if profile_picture %}
+            <div class="profile-picture-small">
+                <img class="profile-picture" src="{{ profile_picture }}" alt="Author profile picture">
             </div>
             {% endif %}
             <p class="fs-5 fw-regular p-0 m-0">{{ post.author_username }}</p>
@@ -58,6 +59,7 @@
         </div>
     </div>
 </div>
+
 {% endfor %}
 
 
@@ -149,7 +151,7 @@
                     '" class="d-block w-100" alt="Imagem"></div>';
                 $('#preview-post-file-edit').append(carouselItem);
 
-                $('#file_content').attr('src', fileUrl);
+                $('#uploadFileInput').attr('src', fileUrl);
             };
             reader.readAsDataURL(this.files[0]);
         });
@@ -177,7 +179,7 @@
             var PostSlugdelete = $(this).data('post-delete-slug')
 
             $.ajax({
-                url: '/posting/feed/' + PostSlugdelete + '/delete',
+                url: '/posting/feed/' + PostSlugdelete + '/delete/',
                 type: 'POST',
                 data: {
                     csrfmiddlewaretoken: '{{ csrf_token }}'

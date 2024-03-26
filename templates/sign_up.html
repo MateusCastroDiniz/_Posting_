@@ -30,17 +30,17 @@
                 </div>
                 <div id="step3" style="display: none;">
                     <div class="mb-3">
-                        <label for="avatar-choice" class="form-label">Avatar</label>
-                        <div id="avatar-choice" class="list-group d-flex flex-row justify-content-center align-items-center gap-2">
+                        <label for="profile_picture-choice" class="form-label">profile_picture</label>
+                        <div id="profile_picture-choice" class="list-group d-flex flex-row justify-content-center align-items-center gap-2">
                             <label class="list-group-item position-relative rounded-3">
-                                <input class="form-check-input me-1 position-absolute end-0 me-3" type="radio" name="listGroupRadio" value="" id="avatar_default" checked>
-                                <img src="{{MEDIA_URL}}/media/default-avatars/default-avatar.png" alt="" style="width: 80px;">
+                                <input class="form-check-input me-1 position-absolute end-0 me-3" type="radio" name="listGroupRadio" value="" id="profile_picture_default" checked>
+                                <img src="{{MEDIA_URL}}/media/default_profile_picture/default_profile_picture.png" alt="" style="width: 80px;">
                             </label>
                             <p class="fs-5 fw-bold">ou</p>
-                            <label class="list-group-item rounded-3" for="avatar_custom">
-                                <input type="radio" class="form-check-input" name="listGroupRadio" id="avatar_custom" value="custom">
+                            <label class="list-group-item rounded-3" for="profile_picture_custom">
+                                <input type="radio" class="form-check-input" name="listGroupRadio" id="profile_picture_custom" value="custom">
                                 Personalizar
-                                <input type="file" class="form-control mt-2" id="avatar_import" name="avatar" disabled>
+                                <input type="file" class="form-control mt-2" id="profile_picture_import" name="profile_picture" disabled>
                             </label>
                         </div>
                     </div>
@@ -82,9 +82,9 @@
 <script>
     $('input[name="listGroupRadio"]').on('change', function () {
         if ($(this).val() === 'custom') {
-            $('#avatar_import').prop('disabled', false);
+            $('#profile_picture_import').prop('disabled', false);
         } else {
-            $('#avatar_import').prop('disabled', true);
+            $('#profile_picture_import').prop('disabled', true);
         }
     });
 </script>
