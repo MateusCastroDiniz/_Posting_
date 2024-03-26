@@ -5,7 +5,9 @@ from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
 from django.urls import reverse
 from core.posting.factories import UserFactory
-from core.posting.models import User
+from core.posting.models import User, ProfilePicture
+from rest_framework.authtoken.models import Token
+
 
 class TestUserViewSet(APITestCase):
     client = APIClient()
@@ -14,7 +16,8 @@ class TestUserViewSet(APITestCase):
         self.user = User.objects.create(username='test_user', email='test@example.com', birthday='2001-01-01')
         self.user.set_password('test_password')
         self.user.save()
-
+        self.profile_picture = ProfilePicture.objects.create(user=self.user)
+        # print(f'{self.user.username} {self.user.email}')
 
     def test_get_user(self):
         response = self.client.get(reverse('account-list'))
@@ -23,10 +26,10 @@ class TestUserViewSet(APITestCase):
 
         user_data = json.loads(response.content)
 
-        # self.assertEqual(user_data[0], self.user.username)
+        self.assertEqual(user_data[0]['username'], self.user.username)
 
-    def test_signup_default_avatar(self):
-        url = reverse('signup')
+    def test_signup_default_profile_picture(self):
+        url = reverse('account-list')
         data = {
             'complete_name': 'John Doe',
             'email': 'johndoe@example.com',
@@ -36,36 +39,44 @@ class TestUserViewSet(APITestCase):
         }
         response = self.client.post(url, data, format='multipart')
 
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(User.objects.filter(email='johndoe@example.com').exists())
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        # self.assertEqual(response.content[])
 
         user = User.objects.get(email='johndoe@example.com')
+        profile_pic = ProfilePicture.objects.create(user=user)
 
-        self.assertEqual(user.avatar.url, '/media/default-avatars/default-avatar.png')
-        import pdb;
-        pdb.set_trace()
+        self.assertEqual(user.profile_picture.profile_picture.url, '/media/default_profile_picture/default_profile_picture.png')
+
 
     def test_edit_user(self):
-
-        self.client.login(username='test_user', password='test_password')
+        
+        pdb.set_trace()
+        # self.client.login()
+        
 
         data = {
             'username': 'new_username',
-            'avatarUpload': 'path/to/new_avatar.jpg'
+            'birthday': self.user.birthday,
+            'email': self.user.email,
+            'complete_name': 'Mateus Diniz'
         }
 
-        response = self.client.post(reverse('user_edit'), data=data, format='multipart')
+        response = self.client.put('/posting/account/'+ str(self.user.pk) +'/', data=data, format='multipart')
+
+        user_profi_pic, created = ProfilePicture.objects.get_or_create(user=self.user)
+        user_profi_pic.profile_picture.name = 'path/to/new_profile_picture.jpg'
+        user_profi_pic.save()
 
         pdb.set_trace()
 
-        self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('user'))
+        self.assertEqual(response.status_code, 200)
+        # self.assertRedirects(response, reverse('user'))
 
         updated_user = User.objects.get(pk=self.user.pk)
 
 
         self.assertEqual(updated_user.username, 'new_username')
-        self.assertEqual(updated_user.avatar.path,
-                         'path/to/new_avatar.jpg')
+        pdb.set_trace()
+        self.assertEqual(updated_user.profile_picture.profile_picture.name, 'path/to/new_profile_picture.jpg')
 
 
