@@ -14,7 +14,7 @@
 small.text-muted {
   color: blue !important; }
 
-#avatar-container{
+.profile-picture-small{
   position: relative;
   width: 50px;
   height: 50px;
@@ -22,19 +22,15 @@ small.text-muted {
   overflow: hidden;
 }
 
-#avatar-post-container{
+.profile-picture-regular{
   position: relative;
-  width: 50px;
-  height: 50px;
+  width: 65px;
+  height: 65px;
   border-radius: 50%;
   overflow: hidden;
 }
 
-#avatar{
-  width: 100%;
-}
-
-#avatar-user-container{
+.profile-picture-big{
   position: relative;
   width: 200px;
   height: 200px;
@@ -42,7 +38,7 @@ small.text-muted {
   overflow: hidden;
 }
 
-#avatar-user{
+.profile-picture{
   width: 100%;
 }
 
@@ -61,4 +57,8 @@ small.text-muted {
 
 #texto_teste{
   font-size: 10rem !important;
+}
+
+#editPostModal .modal-content{
+  height: 30rem;
 }
