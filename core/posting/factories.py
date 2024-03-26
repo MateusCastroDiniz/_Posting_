@@ -39,3 +39,9 @@ class RelationFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Relation
 
+
+class ProfilePictureFactory(factory.django.DjangoModelFactory):
+    user = factory.SubFactory(UserFactory)
+    
+    class Meta:
+        model = ProfilePicture
