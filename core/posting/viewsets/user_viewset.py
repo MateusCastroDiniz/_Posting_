@@ -128,18 +128,17 @@ def edit_user(request, username):
     if request.method == 'POST':
         print(f'Arquivo enviado via request.FILES: {request.FILES.get("file_content")}')
         form = UserForm(request.POST, instance=user)
-        profile_picture = request.FILES.get('file_content')
+        # profile_picture = request.FILES.get('file_content')
 
         if form.is_valid():
             print(form)
-            print(profile_picture)
             # im = Image.open(profile_picture)
 
-            # form.save()
-            # User.objects.filter(username=user.username).update(username=request.POST.get('username'))
-            # edited_user = User.objects.get(username=request.POST.get('username'))
+            form.save()
+            User.objects.filter(username=user.username).update(username=request.POST.get('username'))
+            edited_user = User.objects.get(username=request.POST.get('username'))
 
-            # edited_user.save()
+            edited_user.save()
 
             # if profile_picture:
             #     current_profile_picture = edited_user.profile_picture
@@ -170,17 +169,30 @@ def edit_user(request, username):
 
 
 @login_required
-def edit_profile_picture(request, username=None):
+def edit_profile_picture(request):
     user = get_object_or_404(User, pk=request.user.pk)
     if request.method == 'POST':
-        new_prof_pictur = request.FILES.get('profile_picture')
-        print(new_prof_pictur)
+        profile_picture = request.FILES.get('file_content')
+        print(profile_picture)
+        print(f'name: {user.profile_picture.profile_picture.name}')
+        print(f'url: {user.profile_picture.profile_picture.url}')
+        print(f'path: {user.profile_picture.profile_picture.path}')
 
-        # if new_prof_pictur:
-        #     if user.profile_picture.path != 'media/default_profile_picture/default_profile_picture.png':
-        #         os.remove(user.profile_picture.path)
-        #     user.profile_picture = new_prof_pictur
-        #     user.save()
+
+        if profile_picture:
+
+            current_profile_picture = user.profile_picture
+            
+            if current_profile_picture.profile_picture.url != '/media/default_profile_picture/default_profile_picture.png':
+                os.remove(user.profile_picture.profile_picture.path)
+
+            current_profile_picture.delete()
+
+            profile_pic, created = ProfilePicture.objects.get_or_create(user=user)
+            profile_pic.profile_picture = profile_picture
+            profile_pic.save()
+
+        return redirect('user')
     return render(request, 'user_config.html')
 
 
@@ -191,21 +203,15 @@ def delete_profile_picture(request):
         
         print(user.profile_picture.profile_picture.url)
 
-        # default_pic = os.path.join('default_profile_picture', 'default_profile_picture.png')
+        current_profile_picture = ProfilePicture.objects.get(user=user)
+        
+        if current_profile_picture.profile_picture.url != '/media/default_profile_picture/default_profile_picture.png':
+            os.remove(current_profile_picture.profile_picture.path)
+        current_profile_picture.delete()
 
-        # user.profile_picture.path = 'media/default_profile_picture/default_profile_picture.png'
+        new_profile_picture = ProfilePicture.objects.create(user=user)
+        new_profile_picture.save()
 
-        # new_profpic = ProfilePicture.objects.get(user=user)
-        # new_profpic.name = default_pic
-        # new_profpic.save()
-
-        # if user.profile_picture.profile_picture.url != '/media/default_profile_picture/default_profile_picture.png':
-        #     user.profile_picture.delete()
-
-        # profile_pic, created = ProfilePicture.objects.get_or_create(user=user)
-        # profile_pic.save()
-
-        # user.save()
         return redirect('user')
 
-    return render(request, 'user_config.html')
+    return render(request, 'user_config.html', context={'user': user})
