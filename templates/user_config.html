@@ -39,12 +39,15 @@
 
 
 <div class="row">
-    <div class="col-3">
-        <form id="edituserForm" method="POST" enctype="multipart/form-data" action="{% url 'edit_user' user.username %}">
+
+    <!-- Se algo der errado volte para essa versão do input!!!-->
+
+    <!-- <div class="col-12 col-md-3">
+        <form id="editProfiPic" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="dropend mx-sm-3 d-flex align-items-center">
-                <button class="btn btn-secondary profile-picture-big dropdown-toggle p-0 border-primary border-0" type="button"
-                    data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="dropdown mx-sm-3 d-flex align-items-center">
+                <button class="btn btn-secondary profile-picture-big dropdown-toggle p-0 border-primary border-0"
+                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     {% if user.profile_picture %}
                     <img id="preview-profile-picture" class='profile-picture' src="{{ user.profile_picture }}"
                         alt="Profile picture">
@@ -52,7 +55,7 @@
                     <p>No profile_picture available</p>
                     {% endif %}
                 </button>
-                <ul class="dropdown-menu p-1">
+                <ul class="dropdown-menu p-1 my-2">
                     <li class="d-flex justify-content-center">
                         <label for="ProfilePic" class="dropdown-item">Change profile picture
                             <input type="file" class="form-control" id="ProfilePic" name="file_content"
@@ -66,36 +69,28 @@
                             picture</button></li>
                 </ul>
             </div>
-            <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}">
-            </div>
-        
-            <button id="send_changes_btn" type="submit" class="btn btn-primary" style="display: none;">Salvar
+            <button id="change_profile_pic" type="submit" class="btn btn-primary" style="display: none;">Salvar
                 Alterações</button>
         </form>
-    </div>
-    
-    
-    
-    <div class="col-9">
-        <form id="edituserForm" method="POST" enctype="multipart/form-data" action="{% url 'edit_user' user.username %}">
+    </div> -->
+
+    <div class="col-12 col-md-3">
+        <form id="editProfiPic" method="POST" enctype="multipart/form-data" action="{% url 'edit_profile_picture' %}">
             {% csrf_token %}
-            <div class="dropend mx-sm-3 d-flex align-items-center">
-                <button class="btn btn-secondary profile-picture-big dropdown-toggle p-0 border-primary border-0" type="button"
-                    data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="dropdown mx-sm-3 d-flex align-items-center">
+                <button class="btn btn-secondary profile-picture-big dropdown-toggle p-0 border-primary border-0"
+                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     {% if user.profile_picture %}
-                    <img id="preview-profile-picture" class='profile-picture' src="{{ user.profile_picture }}"
+                    <img id="profile-picture-view" class='profile-picture' src="{{ user.profile_picture }}"
                         alt="Profile picture">
                     {% else %}
                     <p>No profile_picture available</p>
                     {% endif %}
                 </button>
-                <ul class="dropdown-menu p-1">
+                <ul class="dropdown-menu p-1 my-2">
                     <li class="d-flex justify-content-center">
-                        <label for="ProfilePic" class="dropdown-item">Change profile picture
-                            <input type="file" class="form-control" id="ProfilePic" name="file_content"
-                                value="{{user.profile_picture}}" style="display: none;">
+                        <label for="inputProfilePic" class="dropdown-item">Change profile picture
+                            <input type="file" class="form-control" id="inputProfilePic" name="file_content" value="{{user.profile_picture}}" style="display: none">
                         </label>
                     </li>
                     <li>
@@ -105,11 +100,49 @@
                             picture</button></li>
                 </ul>
             </div>
+
+            <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <p class="modal-title fs-5 fw-bold">Deseja escolher essa nova foto de perfil?</p>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="row">
+                                <div class="col-12 text-center">
+
+                                    <div
+                                        class="btn btn-secondary profile-picture-regular dropdown-toggle p-0 border-primary border-0">
+                                        <img id="new-profile-picture-preview" class='profile-picture' src=""
+                                            alt="Profile picture">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <!-- <button id="discardChanges" class="btn btn-secondary">Cancelar</button> -->
+                            <button class="btn btn-primary" type="submit" id="confirmChangeBtn">Confirmar</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+
+    <div class="col-12 col-md-7">
+        <form id="edituserForm" method="POST" enctype="multipart/form-data"
+            action="{% url 'edit_user' user.username %}">
+            {% csrf_token %}
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
                 <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}">
             </div>
-        
+
             <button id="send_changes_btn" type="submit" class="btn btn-primary" style="display: none;">Salvar
                 Alterações</button>
         </form>
@@ -118,11 +151,9 @@
 </div>
 
 
-<!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-verify-choice">
-    Launch demo modal
-  </button> -->
+<!-- Modal antigo!!!!!!!!!! -->
 
-<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
+<!-- <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -132,12 +163,12 @@
             <div class="modal-body">
 
                 <div class="row">
-                    <!-- <div class="col text-center">
+                     <div class="col text-center">
                         <label class="profile-picture-regular">
                             <img id="old-profile-picture-preview" class="profile-picture" src="{{user.profile_picture}}"
                                 alt="">
                         </label>
-                    </div> -->
+                    </div> 
                     <div class="col-12 text-center">
                         <label class="profile-picture-regular">
                             <img id="new-profile-picture-preview" class="profile-picture" src="" alt="">
@@ -146,13 +177,12 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="discardChanges" type="button" class="btn btn-secondary"
-                    data-bs-dismiss="modal">Cancelar</button>
-                <button class="btn btn-primary" id="confirmChangeBtn" data-bs-dismiss="modal">Confirmar</button>
+                <button id="discardChanges" class="btn btn-secondary">Cancelar</button>
+                <button class="btn btn-primary" type="submit" id="confirmChangeBtn" data-bs-dismiss="modal">Confirmar</button>
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 
 <script>
@@ -174,20 +204,28 @@
         //         });
         // })
 
+        // $('#confirmationModal').modal('show')
 
         $('input').on('change', function (e) {
             e.preventDefault();
-            if ('{{ user.username }}' == $('#username').val() && '{{ user.profile_picture.name }}' == $('#ProfilePic').val()) {
+            if ('{{ user.username }}' == $('#username').val()) {
                 $('#send_changes_btn').css('display', 'none')
             } else {
                 $('#send_changes_btn').css('display', 'block')
             }
 
+            if ('{{ user.profile_picture.name }}' == $('#ProfilePic').val()) {
+                $('#change_profile_pic').css('display', 'none')
+            } else {
+                $('#change_profile_pic').css('display', 'block')
+            }
+
+
         })
 
 
 
-        $('#ProfilePic').on('change', function (e) {
+        $('#inputProfilePic').on('change', function (e) {
             // var reader = new FileReader();
             // reader.onload = function (e) {
             //     var imageUrl = e.target.result;
@@ -195,20 +233,37 @@
             // };
             // reader.readAsDataURL(files);
 
-
+            $('#confirmationModal').modal('show')
 
             var file = e.target.files[0];
             if (file) {
                 var reader = new FileReader();
                 reader.onload = function (e) {
-                    $('#preview-profile-picture').attr('src', e.target.result)
+                    $('#profile-picture-view').attr('src', e.target.result)
                     $('#new-profile-picture-preview').attr('src', e.target.result)
+                    $('#ProfilePic').val() = $('#inputProfilePic').val()
                 }
                 reader.readAsDataURL(file);
             }
             $('#confirmationModal').modal('show');
 
         })
+
+        // $('#confirmChangeBtn').on('click', function (e) {
+        // var formData = new FormData($('#editProfiPic'));
+
+        // $.ajax({
+        //     url: '{% url "edit_profile_picture" %}',
+        //     type: 'POST',
+        //     data: formData,
+        //     processData: false,
+        //     contentType: false,
+        //     success: function (data) {
+        //         window.location.reload();
+        //     },
+        //     error: function (xhr, textStatus, errorThrown) {}
+        // });
+        // })
 
         $('#remove-profile-picture-btn').on('click ', function (e) {
             e.preventDefault()
@@ -219,7 +274,9 @@
                 data: {
                     csrfmiddlewaretoken: '{{ csrf_token }}'
                 },
-                success: function (data) {},
+                success: function (data) {
+                    window.location.reload();
+                },
                 error: function (xhr, textStatus, errorThrown) {}
             });
 
