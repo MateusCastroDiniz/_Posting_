@@ -62,3 +62,16 @@ small.text-muted {
 #editPostModal .modal-content{
   height: 30rem;
 }
+
+#text_content{
+  height: 100% !important;
+  resize: none;
+}
+
+/* #createPostModalcontent{
+  height: 20rem !important;
+} */
+
+/* #carouselCreatePostImage{
+  height: 50rem;
+} */
