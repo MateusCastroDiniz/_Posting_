@@ -6,7 +6,7 @@ from core.settings import DATETIME_FORMAT
 
 class Comment(models.Model):
     content = models.CharField(max_length=180, blank=False)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post,related_name='comments',  on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True, editable=False)
     updated_on = models.DateTimeField(auto_now=True, editable=False)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
