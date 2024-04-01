@@ -1,12 +1,16 @@
 from django.contrib import admin
 from .models import *
 
-
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'sex', 'email', 'is_staff', 'is_trusty')
+    list_display = ('username', 'sex', 'email', 'is_staff', 'is_trusty', 'profile_picture')
     search_fields = ['usename']
     list_filter = ('is_staff',)
+
+@admin.register(ProfilePicture)
+class ProfilePicture(admin.ModelAdmin):
+    list_display = ('user', 'profile_picture')
+
 
 @admin.register(PostFile)
 class PostFileAdmin(admin.ModelAdmin):
