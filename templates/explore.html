@@ -29,7 +29,7 @@
     </div>
 
         <div class="modal fade" id="editPostModal" tabindex="-1" aria-labelledby="editPostModalLabel" aria-hidden="true">
-    <form id="editPostForm" method="POST" action="{% url 'edit_post' post.slug%}">
+    
         {% csrf_token %}
         <input type="hidden" name="post_id" id="post_id" value="">
         <div class="modal-dialog modal-lg border-0">
@@ -67,3 +67,4 @@
 
     {% endfor %}
 {% endblock content%}
+

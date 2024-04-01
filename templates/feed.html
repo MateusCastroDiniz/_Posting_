@@ -7,16 +7,16 @@
 <div class="card rounded-4 my-3">
     <div class="card-header d-flex flex-row align-items-center justify-content-between">
         <div class="user_info d-flex flex-row align-items-center gap-3">
-            {% if profile_picture %}
+            {% if post.author_profile_picture %}
             <div class="profile-picture-small">
-                <img class="profile-picture" src="{{ profile_picture }}" alt="Author profile picture">
+                <img class="profile-picture" src="{{ post.author_profile_picture }}" alt="Author profile picture">
             </div>
             {% endif %}
-            <p class="fs-5 fw-regular p-0 m-0">{{ post.author_username }}</p>
+            <a class="fs-5 fw-regular p-0 m-0" href="{% url 'post_detail' post.slug %}">{{ post.author_username }}</a>
         </div>
         {% if post.author_username == user.username %}
         <div class="float-end">
-            <button class="btn bi bi-three-dots-vertical border-1 dropdown-toggle" data-bs-toggle="dropdown"
+            <button class="btn bi bi-three-dots-vertical border-1" data-bs-toggle="dropdown"
                 aria-expanded="false"></button>
             <ul class="dropdown-menu">
                 <li class="dropdown-item d-flex">
@@ -57,6 +57,9 @@
                 <span class="visually-hidden">Próximo</span>
             </button>
         </div>
+    </div>
+    <div class="card-footer">
+        sla
     </div>
 </div>
 

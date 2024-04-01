@@ -1,51 +1,125 @@
 {% extends 'base.html'%}
 
-{% block content %}
+{% block user %}
 
-<div class="col d-flex flex-column flex-md-column align-items-md-start align-items-center">
-    {% if user.profile_picture %}
-    <div class="profile-picture-big">
-        <img class='profile-picture' src="{{ user.profile_picture }}" alt="profile_picture">
-    </div>
-    {% endif %}
-    <div class="d-flex flex-column">
-        <div class="d-flex flex-row align-items-center gap-2">
-            <h2>{{ username }}</h2>
-            <a id="btn-editar-perfil" href="{% url 'edit_user' user.username %}" style="height: 25px !important;" class="btn btn-sm btn-outline-secondary py-0 rounded-pill">Editar perfil</a>
-            <!-- <a class="btn dropdown-item border-1" data-bs-toggle="modal"
-data-bs-target="#createPostModal"> New Post</a> -->
+
+
+<div class="col-12 col-md-4 mr-md-4 d-flex position-relative justify-content-center">
+    <div class="col d-flex flex-column flex-md-column align-items-center">
+
+        <div id="user-painel" class="gap-1">
+            <div class="profile-picture-big">
+                <img class="profile-picture" src="{{user.profile_picture}}" alt="profile_picture">
+            </div>
+            <div class="d-flex flex-column gap-1">
+                <div class="d-flex flex-column align-items-center">
+                    <h2 id="nome">{{user.username}}</h2>
+                    <a id="btn-editar-perfil" href="{% url 'edit_user' user.username %}"
+                        style="height: 25px !important;" class="btn btn-sm btn-outline-dark py-0 rounded-pill">Editar
+                        perfil</a>
+
+                </div>
+                <div class="d-flex align-items-center flex-row justify-content-center gap-3">
+                    <p class="p-0 m-0">Followers {{num_followers}}</p>
+                    <p class="p-0 m-0">Following {{num_following}}</p>
+                </div>
+            </div>
         </div>
-        <div class="f-flex flex-column">
-            <p>Followers: {{ num_followers }}</p>
-            <p>Following: {{ num_following }}</p>
-            <a class="btn btn-outline-danger rounded-pill" href="{% url 'logout' %}">sair</a>
+    </div>
+</div>
+
+<div class="col-12 col-md-8 ml-md-4 d-flex align-items-center flex-column gap-3">
+    {% for post in user_posts %}
+    <div class="card w-75 rounded-4 my-3">
+        <div class="card-header d-flex flex-row align-items-center justify-content-between">
+            <div class="user_info d-flex flex-row align-items-center gap-3">
+                {% if profile_picture %}
+                <div class="profile-picture-small">
+                    <img class="profile-picture" src="{{ profile_picture }}" alt="Author profile picture">
+                </div>
+                {% endif %}
+                <p class="fs-5 fw-regular p-0 m-0">{{ post.author.username }}</p>
+            </div>
+            {% if post.author.username == user.username %}
+            <div class="float-end">
+                <button class="btn bi bi-three-dots-vertical border-1 dropdown-toggle" data-bs-toggle="dropdown"
+                    aria-expanded="false"></button>
+                <ul class="dropdown-menu">
+                    <li class="dropdown-item d-flex">
+
+                        <button id="deletePost"
+                            class="btn btn-danger bi bi-trash3 border-1 d-flex flex-row-reverse align-items-center w-100"
+                            data-post-delete-slug="{{post.slug}}">
+                            <p class="m-0 me-2 p-0">Delete Post</p>
+                        </button>
+                    </li>
+                    <li class="dropdown-item">
+
+                    </li>
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            {{ post.text_content }}
+
+            {% if post.files.all.count == 1 %}
+
+            {% for file in post.files.all %}
+            <img class="post_image rounded-2 mt-4" src="{{ file.arq_content.url }}" alt="{{ file.arq_content.url }}">
+            {% endfor %}
+
+            {% else %}
+
+            <div id="{{post.slug}}-carousel" class="carousel slide rounded-2" data-bs-ride="carousel">
+                <div class="carousel-inner rounded-2">
+                    {% for file in post.files.all %}
+                    <img class="carousel-item active post_image rounded-2 mt-4" src="{{ file.arq_content.url }}"
+                        alt="{{ file.arq_content.url }}">
+                    {% endfor %}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#{{post.slug}}-carousel"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#{{post.slug}}-carousel"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Próximo</span>
+                </button>
+            </div>
+            {% endif %}
         </div>
     </div>
+    {% endfor %}
 </div>
 
 
 
 
 
-<!-- <script>
-    $(document).ready(function(){
-        $('#edituserForm').submit(function (e) {
-            e.preventDefault();
-            var formData = new FormData(this);
-            var userId = $('#userId').val();
-            $.ajax({
-                url: '/posting/account/1/',
-                type: 'PUT',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (data) {
-                    window.location.reload();
-                },
-                error: function (xhr, textStatus, errorThrown) {}
-            });
-        });
-    })
-</script> -->
+<script>
+    $(document).ready(function () {
+        let scrollInit = 40;
+        $(window).on('scroll', function(e){
+            
+            let scrollTop = window.scrollY;
 
-{% endblock content %}
+            if (scrollTop > scrollInit){
+                $('#user-painel').addClass('scrolled')
+                $('a#btn-editar-perfil').removeClass('btn-outline-dark')
+                $('a#btn-editar-perfil').addClass('btn-outline-light')
+            }else{
+                $('#user-painel').removeClass('scrolled')
+                $('a#btn-editar-perfil').addClass('btn-outline-dark')
+                $('a#btn-editar-perfil').removeClass('btn-outline-light')
+            }
+
+
+
+        })
+    })
+</script>
+
+{% endblock user %}
