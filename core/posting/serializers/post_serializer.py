@@ -9,7 +9,7 @@ class PostSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(read_only=True, many=True)
     files = PostFileSerializer(read_only=True, many=True)
     author_username = serializers.ReadOnlyField(source='author.username')
-    profile_picture = serializers.ReadOnlyField(source='author.profile_picture.profile_picture.url')
+    author_profile_picture = serializers.ReadOnlyField(source='author.profile_picture.profile_picture.url')
 
     class Meta:
         model = Post
@@ -22,7 +22,7 @@ class PostSerializer(serializers.ModelSerializer):
             'files',
             'slug',
             'comments',
-            'profile_picture'
+            'author_profile_picture'
         ]
 
     def create(self, validated_data):
