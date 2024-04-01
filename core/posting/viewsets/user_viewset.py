@@ -97,12 +97,14 @@ class UserViewSet(viewsets.ModelViewSet):
 
 @login_required
 @action(detail=True, methods=['post'])
-def user_config(request):
+def user_detail(request):
     user = request.user
     user_posts = Post.objects.filter(author=user) # !!! Já está aqui! Não reinvente a roda!
     profile_picture = ProfilePicture.objects.get(user=request.user).profile_picture.url
-    followers = list(map(lambda x: x.follower.username, Relation.objects.filter(followed=User.objects.get(pk=request.user.pk))))
-    following = list(map(lambda x: x.followed.username, Relation.objects.filter(follower=User.objects.get(pk=request.user.pk))))
+    # followers = [follower.follower for follower in Relation.objects.filter(followed=request.user)]
+    # following = [follower.followed for follower in Relation.objects.filter(follower=request.user)]
+    followers = list(map(lambda x: x.follower.username, Relation.objects.filter(followed=request.user)))
+    following = list(map(lambda x: x.followed.username, Relation.objects.filter(follower=request.user)))
     num_followers = len(followers)
     num_following = len(following)
 
