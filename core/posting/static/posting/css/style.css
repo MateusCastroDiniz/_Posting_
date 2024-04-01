@@ -5,6 +5,12 @@
     flex-grow: 1;
 }
 
+header{
+  width: 100vw;
+  z-index: 1;
+  background-color: white;
+}
+
 .invalido {
   border: 1px solid #ff0000; }
 
@@ -38,6 +44,18 @@ small.text-muted {
   overflow: hidden;
 }
 
+.profile-picture-comment{
+  position: relative;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.text-body-secondary{
+  font-size: 12px !important;
+}
+
 .profile-picture{
   width: 100%;
 }
@@ -53,6 +71,10 @@ small.text-muted {
 .remove_img_btn{
   padding: 10px;
   border-radius: 50%;
+}
+
+.card-footer, .card-header{
+  background: none;
 }
 
 #texto_teste{
@@ -75,3 +97,30 @@ small.text-muted {
 /* #carouselCreatePostImage{
   height: 50rem;
 } */
+
+#user-painel{
+  background-color: white;
+  padding: 2.5rem;
+  border-radius: 20px;
+  color: black;
+  position: fixed;
+  top: 80px;
+  transition: .2s;
+}
+
+.scrolled{
+  background-color: gray !important;
+  color: white !important;
+  -webkit-box-shadow: 0px 0px 56px -7px rgba(0,0,0,0.25);
+  -moz-box-shadow: 0px 0px 56px -7px rgba(0,0,0,0.25);
+  box-shadow: 0px 0px 56px -7px rgba(0,0,0,0.25);
+}
+
+
+@media (max-width: 768px){
+  #user-painel{
+    position: relative;
+  }
+
+}
+
