@@ -21,17 +21,23 @@
                             class="btn btn-sm btn-outline-dark py-0 rounded-pill btn-user-painel">Editar
                             perfil</a>
                         {% else %}
-    
-                        {% if user.username not in followers %}
-                        <button id="btn-follow-user" style="height: 25px !important;"
-                            class="btn btn-sm btn-outline-dark py-0 rounded-pill btn-user-painel"
-                            data-follow-user-username="{{ username }}">seguir</button>
-                        {% else %}
-                        <button id="btn-unfollow-user" style="height: 25px !important;"
-                            class="btn btn-sm btn-outline-dark py-0 rounded-pill btn-user-painel"
-                            data-unfollow-user-username="{{ username }}"> deixar de seguir</button>
-    
-                        {% endif %}
+
+                            {% if user.is_authenticated%}
+                                {% if user.username not in followers %}
+                                <button id="btn-follow-user" style="height: 25px !important;"
+                                    class="btn btn-sm btn-outline-dark py-0 rounded-pill btn-user-painel"
+                                    data-follow-user-username="{{ username }}">seguir</button>
+                                {% else %}
+                                <button id="btn-unfollow-user" style="height: 25px !important;"
+                                    class="btn btn-sm btn-outline-dark py-0 rounded-pill btn-user-painel"
+                                    data-unfollow-user-username="{{ username }}"> deixar de seguir</button>
+            
+                                {% endif %}
+                            {% else %}
+                            <a id="btn-follow-user" style="height: 25px !important;"
+                                    class="btn btn-sm btn-outline-dark py-0 rounded-pill btn-user-painel"
+                                    href="{% url 'login' %}">Faça o login para seguir</a>
+                            {% endif %}
     
                         {% endif %}
                     </div>
@@ -110,7 +116,9 @@
                 </div>
             </div>
             <div class="card-footer">
+                {% if user.is_authenticated%}
                 <button class="btn"><i class="bi bi-heart"></i></button>
+                {% endif%}
                 <a class="btn bi bi-chat" href="{% url 'post_detail' post.slug%}"></a>
             </div>
         </div>
