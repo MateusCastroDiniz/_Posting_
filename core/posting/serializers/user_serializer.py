@@ -1,9 +1,12 @@
 from rest_framework import serializers
 from core.posting.models import User
 from .profile_picture_serializer import ProfilePictureSerializer
+from .relations_serializer import RelationSerializer
 
 class UserSerializer(serializers.ModelSerializer):
     profile_picture = ProfilePictureSerializer(read_only=True, many=False)
+    followers = RelationSerializer(read_only=True, many=True)
+    following = RelationSerializer(read_only=True, many=True)
 
     class Meta:
         model = User
@@ -13,7 +16,9 @@ class UserSerializer(serializers.ModelSerializer):
             'email',
             'birthday',
             'sex',
-            'profile_picture'
+            'profile_picture',
+            'followers',
+            'following',
         ]
 
     def update(self, instance, validated_data):
