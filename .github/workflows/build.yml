@@ -1,0 +1,36 @@
+name: Python Application
+
+on: [push]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.10.12]
+        poetry-version: [1.7.1]
+    
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }} 
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install poetry ${{matrix.poetry-version}}
+        run: |
+          python -m ensurepip
+          python -m pip install --upgrade pip
+          python -m pip install poetry==${{matrix.poetry-version}}
+      - name: Test poetry download
+        run: poetry --version
+      
+      - name: Installing dependences
+        shell: bash
+        run: python -m poetry install
+      
+      - name: Running tests
+        run: poetry run python manage.py test tests
