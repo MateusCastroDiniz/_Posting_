@@ -38,7 +38,7 @@ SECRET_KEY = "django-insecure-kllgq$g0934=bp4q3dit-2cy2c6-s$&_5@@xu8zy8!(p8h&7ur
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost','127.0.0.1', '']
 
 AUTH_USER_MODEL = 'posting.User'
 
@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "rest_framework",
     "core.posting",
+    "psycopg2",
 
 ]
 
@@ -93,8 +94,12 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
+        "NAME": os.environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
+        "PASSWORD": os.environ.get("SQL_PASSWORD", "bookstore_dev"),
+        "HOST": os.environ.get("SQL_HOST", "localhost"),
+        "PORT": os.environ.get("SQL_PORT", "5432"),
+        "USER": os.environ.get("SQL_USER", "dev"),
     }
 }
 
@@ -146,3 +151,7 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
     ]
 }
+
+INTERNAL_IPS = ["127.0.0.1",]
+
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(' ')
