@@ -19,6 +19,7 @@ black = "^24.2.0"
 django-extensions = "^3.2.3"
 psycopg2-binary = "^2.9.9"
 pillow = "^10.2.0"
+gitpython = "^3.1.43"
 
 
 [build-system]
