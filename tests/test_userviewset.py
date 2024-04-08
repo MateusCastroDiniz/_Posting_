@@ -49,8 +49,6 @@ class TestUserViewSet(APITestCase):
 
 
     def test_edit_user(self):
-        
-        pdb.set_trace()
         # self.client.login()
         
 
@@ -67,8 +65,6 @@ class TestUserViewSet(APITestCase):
         user_profi_pic.profile_picture.name = 'path/to/new_profile_picture.jpg'
         user_profi_pic.save()
 
-        pdb.set_trace()
-
         self.assertEqual(response.status_code, 200)
         # self.assertRedirects(response, reverse('user'))
 
@@ -76,7 +72,6 @@ class TestUserViewSet(APITestCase):
 
 
         self.assertEqual(updated_user.username, 'new_username')
-        pdb.set_trace()
         self.assertEqual(updated_user.profile_picture.profile_picture.name, 'path/to/new_profile_picture.jpg')
 
 

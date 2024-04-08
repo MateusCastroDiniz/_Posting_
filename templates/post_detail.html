@@ -73,7 +73,7 @@
     <div class="col-12 col-lg-5 mr-md-4 d-flex position-relative justify-content-center h-100">
         <div class="card w-100 rounded-4 my-3">
     
-            <div id="comments-card-body" class="card-body" style="overflow-y: scroll;">
+            <div id="comments-card-body" class="card-body position-relative" style="overflow-y: scroll;">
     
                 {% if comments.count > 0 %}
                 {% for comment in comments %}
@@ -111,11 +111,12 @@
                 {% endfor %}
     
                 {% else %}
-                    <p class="text-body-secondary"> Ainda não há comentários </p>
+                    <p class="text-body-secondary position-absolute top-50 start-50 translate-middle"> Ainda não há comentários </p>
                 {% endif %}
     
             </div>
             <div class="card-footer border-0">
+                {% if user.is_authenticated %}
                 <form method="post" class="d-flex justify-content-between flex-row gap-1"
                     action="{% url 'create_comment' post.slug%}">
                     {% csrf_token %}
@@ -124,6 +125,7 @@
                     <input type="text" class="form-control border-1 rounded-pill w-75" name="content" placeholder="...">
                     <button class="btn btn-text"><i class="bi bi-send-fill"></i></button>
                 </form>
+                {% endif %}
             </div>
         </div>
     </div>
