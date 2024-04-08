@@ -1,78 +1,80 @@
 {% extends 'base.html' %}
 
-{% block authentication %}
-<div class="col-7">
-    <div class="card">
-        <div class="card-body">
-            <form id="registrationForm" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="progress my-2" role="progressbar" aria-label="Example 1px high" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="height: 7px">
-                    <div id="cadastro_progressbar" class="progress-bar" style="width: 33%"></div>
-                </div>
-                <div id="step1">
-                    <div class="mb-3">
-                        <label for="complete_name" class="form-label">Your complete name</label>
-                        <input type="text" class="form-control obrigatorio" id="complete_name" name="complete_name" placeholder="Insert your name" required>
-                        <small class="text-muted">*Enter your name*</small>
+{% block content %}
+<div class="row d-flex flex-column align-items-center h-100 position-relative">
+    <div class="col-12 col-lg-6 top-50 start-50 position-absolute translate-middle">
+        <div class="card">
+            <div class="card-body">
+                <form id="registrationForm" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="progress my-2" role="progressbar" aria-label="Example 1px high" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="height: 7px">
+                        <div id="cadastro_progressbar" class="progress-bar" style="width: 33%"></div>
                     </div>
-                    <div class="mb-3">
-                        <label for="email_register" class="form-label">Email address</label>
-                        <input type="email" class="form-control obrigatorio" id="email_register" name="email" placeholder="email@example.com" required>
-                        <small class="text-muted">*Enter a valid email*</small>
-                    </div>
-                </div>
-                <div id="step2" style="display: none;">
-                    <div class="mb-3">
-                        <label for="birthday" class="form-label">Your birthday</label>
-                        <input type="date" class="form-control obrigatorio" id="birthday" name="birthday" required>
-                        <small class="text-muted">*Enter a valid date*</small>
-                    </div>
-                </div>
-                <div id="step3" style="display: none;">
-                    <div class="mb-3">
-                        <label for="profile_picture-choice" class="form-label">profile_picture</label>
-                        <div id="profile_picture-choice" class="list-group d-flex flex-row justify-content-center align-items-center gap-2">
-                            <label class="list-group-item position-relative rounded-3">
-                                <input class="form-check-input me-1 position-absolute end-0 me-3" type="radio" name="listGroupRadio" value="" id="profile_picture_default" checked>
-                                <img src="{{MEDIA_URL}}/media/default_profile_picture/default_profile_picture.png" alt="" style="width: 80px;">
-                            </label>
-                            <p class="fs-5 fw-bold">ou</p>
-                            <label class="list-group-item rounded-3" for="profile_picture_custom">
-                                <input type="radio" class="form-check-input" name="listGroupRadio" id="profile_picture_custom" value="custom">
-                                Personalizar
-                                <input type="file" class="form-control mt-2" id="profile_picture_import" name="profile_picture" disabled>
-                            </label>
+                    <div id="step1">
+                        <div class="mb-3">
+                            <label for="complete_name" class="form-label">Your complete name</label>
+                            <input type="text" class="form-control obrigatorio" id="complete_name" name="complete_name" placeholder="Insert your name" required>
+                            <small class="text-muted">*Enter your name*</small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email_register" class="form-label">Email address</label>
+                            <input type="email" class="form-control obrigatorio" id="email_register" name="email" placeholder="email@example.com" required>
+                            <small class="text-muted">*Enter a valid email*</small>
                         </div>
                     </div>
-                    
-                    
-                    
-                    
-                    
-                    
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control obrigatorio" id="username" name="username" placeholder="Type a username" required>
-                        <small class="text-muted">*This username is already in use*</small>
+                    <div id="step2" style="display: none;">
+                        <div class="mb-3">
+                            <label for="birthday" class="form-label">Your birthday</label>
+                            <input type="date" class="form-control obrigatorio" id="birthday" name="birthday" required>
+                            <small class="text-muted">*Enter a valid date*</small>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control obrigatorio" id="password" name="password" placeholder="Type a password" required>
-                        <small class="text-muted">*The password must contain at least:*
-                            <ul>
-                                <li>Letters</li>
-                                <li>Numbers</li>
-                                <li>Special characters</li>
-                            </ul>
-                        </small>
+                    <div id="step3" style="display: none;">
+                        <div class="mb-3">
+                            <label for="profile_picture-choice" class="form-label">profile_picture</label>
+                            <div id="profile_picture-choice" class="list-group d-flex flex-row justify-content-center align-items-center gap-2">
+                                <label class="list-group-item position-relative rounded-3">
+                                    <input class="form-check-input me-1 position-absolute end-0 me-3" type="radio" name="listGroupRadio" value="" id="profile_picture_default" checked>
+                                    <img src="{{MEDIA_URL}}/media/default_profile_picture/default_profile_picture.png" alt="" style="width: 80px;">
+                                </label>
+                                <p class="fs-5 fw-bold">ou</p>
+                                <label class="list-group-item rounded-3" for="profile_picture_custom">
+                                    <input type="radio" class="form-check-input" name="listGroupRadio" id="profile_picture_custom" value="custom">
+                                    Personalizar
+                                    <input type="file" class="form-control mt-2" id="profile_picture_import" name="profile_picture" disabled>
+                                </label>
+                            </div>
+                        </div>
+    
+    
+    
+    
+    
+    
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control obrigatorio" id="username" name="username" placeholder="Type a username" required>
+                            <small class="text-muted">*This username is already in use*</small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control obrigatorio" id="password" name="password" placeholder="Type a password" required>
+                            <small class="text-muted">*The password must contain at least:*
+                                <ul>
+                                    <li>Letters</li>
+                                    <li>Numbers</li>
+                                    <li>Special characters</li>
+                                </ul>
+                            </small>
+                        </div>
                     </div>
-                </div>
-                <div class="mb-3 d-flex gap-2">
-                    <button type="button" class="btn btn-secondary rounded-pill" id="prevStep" style="display: none;">Back</button>
-                    <button type="button" class="btn btn-primary rounded-pill" id="nextStep">Next</button>
-                    <button type="submit" class="btn btn-primary rounded-pill" id="submitBtn" style="display: none;">Sign up</button>
-                </div>
-            </form>
+                    <div class="mb-3 d-flex gap-2">
+                        <button type="button" class="btn btn-secondary rounded-pill" id="prevStep" style="display: none;">Back</button>
+                        <button type="button" class="btn btn-primary rounded-pill" id="nextStep">Next</button>
+                        <button type="submit" class="btn btn-primary rounded-pill" id="submitBtn" style="display: none;">Sign up</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -90,4 +92,4 @@
 </script>
 
 
-{% endblock authentication %}
+{% endblock content %}

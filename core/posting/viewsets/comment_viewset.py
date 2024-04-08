@@ -14,13 +14,18 @@ class CommentViewSet(ModelViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def create_comment(self, request, post_id):
-        post = get_object_or_404(Post, pk=post_id)
+    @classmethod
+    @action(detail=True, methods=['post'])
+    def create_comment(self, request, slug):
+        post = get_object_or_404(Post, slug=slug)
         if request.method == 'POST':
-            form = CommentForm(request.POST, instance=post)
-            if form.is_valid():
-                form.save()
-                return redirect('feed')
+            print(post)
+            comment = Comment.objects.create(post=post, content=request.POST.get('content'), created_by=request.user)
+            comment.save()
+            # form = CommentForm(request.POST, instance=post)
+            # if form.is_valid():
+            #     form.save()
+            return redirect('post_detail', slug=slug)
 
     @classmethod
     @action(detail=True, methods=['post'])
@@ -37,6 +42,16 @@ class CommentViewSet(ModelViewSet):
                 return render(request, 'edit_comment.html', {'form': form})
         else:
             return redirect('post_detail')
+    
+    @classmethod
+    @action(detail=True, methods=['post'])
+    def delete_comment(self, request, id):
+        comment = Comment.objects.get(id=id)
+        post_slug = comment.post.slug
+        if request.method == 'POST':
+            print(comment)
+            comment.delete()
+            return redirect('post_detail', slug=post_slug)
 
 
 

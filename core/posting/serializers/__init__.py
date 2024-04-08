@@ -4,3 +4,4 @@ from .comment_serializer import CommentSerializer
 from .relations_serializer import RelationSerializer
 from .post_file_serializer import PostFileSerializer
 from .profile_picture_serializer import ProfilePictureSerializer
+from .like_serializer import LikeSerializer

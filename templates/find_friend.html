@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div class="row d-flex flex-column align-items-center">
+    <div class="col-12 col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <nav class="navbar bg-body-tertiary card-title">
+                    <div class="container-fluid">
+                        <form id="form-find-friend" class="d-flex w-100" role="search" method="get">
+                            <input class="form-control me-2 rounded-pill" id="input_search_user" name="search" autocomplete="off" value="{{ request.GET.search }}" type="search" placeholder="Who are you looking for?" aria-label="Search">
+                            <button class="btn btn-outline-secondary rounded-pill">Find</button>
+                        </form>
+                    </div>
+                </nav>
+                {% for profile in user_list %}
+                <div class="card border-0" style="max-width: 100%;">
+                    <div class="g-0 d-flex flex-row align-items-center justify-content-between p-2 gap-3">
+                        <div class="d-flex flex-row align-items-center gap-2">
+                            <a class="text-decoration-none text-dark" href="{% url 'user_detail' profile.username %}">
+                                <div class="card-body d-flex flex-row gap-2 align-items-center p-0">
+                                    <div class="profile-picture-small">
+                                        <img src="{{profile.profile_picture}}" class="img-fluid rounded-start" alt="...">
+                                    </div>
+                                    <p class="card-title m-0">{{ profile.username }}</p>
+                                </div>
+                            </a>
+                        </div>
+                        {% if profile.username in following %}
+                        <div class="d-flex">
+                            <button class="btn btn-sm btn-outline-dark btn-unfollow-user py-0 rounded-pill btn-user-painel"
+                                data-unfollow-user-username="{{ profile.username }}"> deixar de seguir</button>
+                        </div>
+                        {% endif%}
+                    </div>
+                </div>
+
+
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.btn-unfollow-user').on('click', function (e) {
+            var UnfollowUsername = $(this).data('unfollow-user-username')
+
+            $.ajax({
+                url: '../../u/unfollow/' + UnfollowUsername + '/',
+                type: 'POST',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function (data) {
+                    window.location.reload();
+                },
+                error: function (xhr, textStatus, errorThrown) {}
+            })
+        })
+        $('#input_search_user').on('keyup', function(){
+            $()
+        })
+    })
+</script>
+
+
+
+{% endblock content %}

@@ -24,7 +24,7 @@ class UserCreateForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model: Comment
-        fields = ['__all__']
+        fields = '__all__'
 
 
 class ProfilePicForm(forms.ModelForm):

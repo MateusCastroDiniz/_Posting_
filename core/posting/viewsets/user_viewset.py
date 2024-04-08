@@ -95,28 +95,30 @@ class UserViewSet(viewsets.ModelViewSet):
         return render(request, 'sign_up.html')
 
 
-@login_required
-@action(detail=True, methods=['post'])
-def user_config(request):
-    user = request.user
-    user_posts = Post.objects.filter(author=user) # !!! Já está aqui! Não reinvente a roda!
-    profile_picture = ProfilePicture.objects.get(user=request.user).profile_picture.url
-    followers = list(map(lambda x: x.follower.username, Relation.objects.filter(followed=User.objects.get(pk=request.user.pk))))
-    following = list(map(lambda x: x.followed.username, Relation.objects.filter(follower=User.objects.get(pk=request.user.pk))))
-    num_followers = len(followers)
-    num_following = len(following)
+    @classmethod
+    @action(detail=True, methods=['post'])
+    def user_detail(self, request, username):
+        user = User.objects.get(username=username)
+        user_posts = Post.objects.filter(author=user) # !!! Já está aqui! Não reinvente a roda!
+        profile_picture = ProfilePicture.objects.get(user=user).profile_picture.url
+        # followers = [follower.follower for follower in Relation.objects.filter(followed=request.user)]
+        # following = [follower.followed for follower in Relation.objects.filter(follower=request.user)]
+        followers = list(map(lambda x: x.follower.username, Relation.objects.filter(followed=user)))
+        following = list(map(lambda x: x.followed.username, Relation.objects.filter(follower=user)))
+        num_followers = len(followers)
+        num_following = len(following)
 
-    context = {
-            'username': user.username,
-            'email': user.email,
-            'followers': followers,
-            'following': following,
-            'num_following': num_following,
-            'num_followers': num_followers,
-            'user_posts': user_posts,
-            'profile_picture': profile_picture
-    }
-    return render(request, 'user_detail.html', context)
+        context = {
+                'username': user.username,
+                'email': user.email,
+                'followers': followers,
+                'following': following,
+                'num_following': num_following,
+                'num_followers': num_followers,
+                'user_posts': user_posts,
+                'profile_picture': profile_picture
+        }
+        return render(request, 'user_detail.html', context)
 
 
 @login_required
@@ -159,7 +161,7 @@ def edit_user(request, username):
             # if profile_picture is None:
             #     redirect('user')
 
-            return redirect('user')
+            return redirect('user_detail', username=edited_user.username)
 
 
         # Estou pensando em separar o campo de atualização de perfil do formulário de edição de username.

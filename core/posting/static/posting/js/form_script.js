@@ -1,16 +1,5 @@
 $(document).ready(function () {
 
-//  const btnToastFreq = $('#btn-toast-freq')
-//  const toastFreq = $('#toast-freq')
-//
-//  if (btnToastFreq) {
-//    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastFreq)
-//    btnToastFreq.on('click', () => {
-//      toastBootstrap.show()
-//      toastFreq.addClass("d-flex")
-//    })
-//  }
-
   function validarCampo(campo) {
     const regexNome = /\d|,/g;
     let camposValidos = true;

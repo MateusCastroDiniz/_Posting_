@@ -5,6 +5,12 @@
     flex-grow: 1;
 }
 
+header{
+  width: 100vw;
+  z-index: 1;
+  background-color: white;
+}
+
 .invalido {
   border: 1px solid #ff0000; }
 
@@ -24,8 +30,8 @@ small.text-muted {
 
 .profile-picture-regular{
   position: relative;
-  width: 65px;
-  height: 65px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   overflow: hidden;
 }
@@ -62,3 +68,34 @@ small.text-muted {
 #editPostModal .modal-content{
   height: 30rem;
 }
+
+#text_content{
+  height: 100% !important;
+  resize: none;
+}
+
+/* #createPostModalcontent{
+  height: 20rem !important;
+} */
+
+/* #carouselCreatePostImage{
+  height: 50rem;
+} */
+
+#user-painel{
+  background-color: gray;
+  padding: 2.5rem;
+  border-radius: 20px;
+  color: #ffff;
+  position: fixed;
+  top: 80px;
+}
+
+
+@media (max-width: 768px){
+  #user-painel{
+    position: relative;
+  }
+
+}
+

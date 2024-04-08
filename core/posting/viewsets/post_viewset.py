@@ -54,10 +54,14 @@ class PostViewSet(ModelViewSet):
             return render(request, 'base.html')
 
         elif request.method == 'POST':
+            # print(request.POST.get('text_content'))
             text_content = request.POST.get('text_content')
             files = request.FILES.getlist('file_content')
             data = {'text_content': text_content}
             serializer = PostSerializer(data=data)
+            
+            print(request.POST)
+            print(files)
 
             if serializer.is_valid():
                 post = serializer.save(author=request.user)
@@ -68,6 +72,8 @@ class PostViewSet(ModelViewSet):
                 return redirect('feed')
             else:
                 return render(request, 'error.html', {'errors': serializer.errors})
+            # return render(request, 'base.html')
+
 
 
     def retrieve(self, request, *args, **kwargs):
@@ -89,7 +95,6 @@ class PostViewSet(ModelViewSet):
             post = Post.objects.get(slug=slug)
             post.delete()
             return redirect('feed')
-        return render(request, 'feed.html')
 
     @action(detail=True, methods=['post'])
     def update_post(self, request, slug=None):
@@ -99,6 +104,19 @@ class PostViewSet(ModelViewSet):
             serializer.save()
             return redirect('feed')
         return render(request, 'feed.html')
+
+    # @action(detail=True, methods=['post'])
+    # def update_post(self, request, slug=None):
+    #     post = self.get_object()
+    #     form = PostForm(request.POST)
+    #     if request.method == 'POST':
+    #         print(request.POST)
+    #         form = PostForm(request.POST, instance=post)
+    #         if form.is_valid():
+    #             form.save()
+    #             Post.objects.filter(slug=slug).update(text_content=request.POST.get('text_content'))
+    #             return redirect('feed')
+    #     return render(request, 'feed.html')
 
     @action(detail=True, methods=['post'])
     def delete_file_post(self, request, id=None):
@@ -113,13 +131,24 @@ class PostViewSet(ModelViewSet):
 
 @login_required
 def post_list(request):
-    feed = PostViewSet.as_view({'get': 'list'})(request).data
+
+    followed_users = Relation.objects.filter(follower=request.user).values_list('followed', flat=True)
+    followers_users = Relation.objects.filter(followed=request.user).values_list('follower', flat=True)
+    
+
+    authors_posts = list(followed_users)
+    authors_posts.append(request.user.id)
+    feed = Post.objects.filter(author__in=authors_posts)
+
+    liked_posts = Post.objects.filter(likes__liked_by=request.user)
+    
     comments = Comment.objects.all().order_by('created_on')
-    return render(request, 'feed.html', {'feed': feed, 'comments': comments, 'user': request.user})
+    return render(request, 'feed.html', {'feed': feed, 'followed_users':followed_users, 'followers_users':followers_users, 'comments': comments, 'user': request.user, 'liked_posts': liked_posts})
 
 
 @login_required
 def explore_list(request):
-    feed = PostViewSet.as_view({'get': 'list'})(request).data
+    feed = Post.objects.filter()
+
     comments = Comment.objects.all().order_by('created_on')
     return render(request, 'explore.html', {'feed': feed, 'comments': comments, 'user': request.user})
