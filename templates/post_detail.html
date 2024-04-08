@@ -2,117 +2,129 @@
 
 <title> {{ post.author.username}}'s post</title>
 
-<div class="col-12 col-lg-7 ml-md-4 d-flex align-items-center flex-column gap-3">
-    <div class="card w-100 rounded-4 my-3">
-        <div class="card-header d-flex flex-row align-items-center justify-content-between">
-            <div class="user_info d-flex flex-row align-items-center gap-3">
-                {% if profile_picture %}
-                <div class="profile-picture-small">
-                    <img class="profile-picture" src="{{ profile_picture }}" alt="Author profile picture">
+<div id="row-post-detail" class="row d-flex flex-column flex-md-row">
+    <div class="col-12 col-lg-7 ml-md-4 d-flex align-items-center flex-column gap-3">
+        <div class="card w-100 rounded-4 my-3">
+            <div class="card-header d-flex flex-row align-items-center justify-content-between">
+                <div class="user_info d-flex flex-row align-items-center gap-3">
+    
+                    <a class="fs-5 fw-regular p-0 m-0 text-body link-underline link-underline-opacity-0 d-flex flex-row align-items-center gap-2"
+                        href="{% url 'user_detail' post.author %}">
+                        {% if post.author.profile_picture %}
+                            <div class="profile-picture-small">
+                                <img class="profile-picture" src="{{ post.author.profile_picture }}" alt="Author profile picture">
+                            </div>
+                        {% endif %}
+    
+                        {{ post.author }}
+                    </a>
+                </div>
+                {% if post.author.username == user.username %}
+                <div class="float-end">
+                    <button class="btn bi bi-three-dots-vertical border-1 dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-expanded="false"></button>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item d-flex">
+        
+                            <button id="deletePost"
+                                class="btn btn-danger bi bi-trash3 border-1 d-flex flex-row-reverse align-items-center w-100"
+                                data-post-delete-slug="{{post.slug}}">
+                                <p class="m-0 me-2 p-0">Delete Post</p>
+                            </button>
+                        </li>
+                        <li class="dropdown-item">
+                            <button
+                                class="btn btn-secondary bi bi-pencil border-1 edit-post-btn d-flex flex-row-reverse align-items-center w-100"
+                                data-bs-toggle="modal" data-bs-target="#editPostModal" data-post-slug="{{ post.slug }}"
+                                data-file-content="{% for file in post.files.all %}{{file.arq_content}} {%endfor%}"
+                                data-text-content="{{ post.text_content }}">
+                                <p class="m-0 me-2 p-0">Edit Post</p>
+                            </button>
+                        </li>
+                    </ul>
                 </div>
                 {% endif %}
-                <p class="fs-5 fw-regular p-0 m-0">{{ post.author.username }}</p>
             </div>
-        </div>
-        {% if post.author == user.username %}
-        <div class="float-end">
-            <button class="btn bi bi-three-dots-vertical border-1 dropdown-toggle" data-bs-toggle="dropdown"
-                aria-expanded="false"></button>
-            <ul class="dropdown-menu">
-                <li class="dropdown-item d-flex">
-
-                    <button id="deletePost"
-                        class="btn btn-danger bi bi-trash3 border-1 d-flex flex-row-reverse align-items-center w-100"
-                        data-post-delete-slug="{{post.slug}}">
-                        <p class="m-0 me-2 p-0">Delete Post</p>
+            <div class="card-body">
+                {{ post.text_content }}
+    
+                <div id="{{post.slug}}-carousel" class="carousel slide rounded-2" data-bs-ride="carousel">
+                    <div class="carousel-inner rounded-2">
+                        {% for file in post.files.all %}
+                        <img class="carousel-item active post_image rounded-2 mt-4" src="{{ file.arq_content.url }}"
+                            alt="{{ file.arq_content.url }}">
+                        {% endfor %}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#{{post.slug}}-carousel"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Anterior</span>
                     </button>
-                </li>
-                <li class="dropdown-item">
-                    <button
-                        class="btn btn-secondary bi bi-pencil border-1 edit-post-btn d-flex flex-row-reverse align-items-center w-100"
-                        data-bs-toggle="modal" data-bs-target="#editPostModal" data-post-slug="{{ post.slug }}"
-                        data-file-content="{% for file in post.files %}{{file.arq_content}} {%endfor%}"
-                        data-text-content="{{ post.text_content }}">
-                        <p class="m-0 me-2 p-0">Edit Post</p>
+                    <button class="carousel-control-next" type="button" data-bs-target="#{{post.slug}}-carousel"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Próximo</span>
                     </button>
-                </li>
-            </ul>
-        </div>
-        {% endif %}
-        <div class="card-body">
-            {{ post.text_content }}
-
-            <div id="{{post.slug}}-carousel" class="carousel slide rounded-2" data-bs-ride="carousel">
-                <div class="carousel-inner rounded-2">
-                    {% for file in post.files.all %}
-                    <img class="carousel-item active post_image rounded-2 mt-4" src="{{ file.arq_content.url }}"
-                        alt="{{ file.arq_content.url }}">
-                    {% endfor %}
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#{{post.slug}}-carousel"
-                    data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Anterior</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#{{post.slug}}-carousel"
-                    data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Próximo</span>
-                </button>
             </div>
         </div>
     </div>
-</div>
-
-<div class="col-12 col-lg-5 mr-md-4 d-flex position-relative justify-content-center">
-    <div class="card w-100 rounded-4 my-3">
-
-        <div class="card-body">
-
-            {% for comment in comments %}
-            <div class="card w-100 border-0">
-                <div class="card-body d-flex flex-column m-0 gap-1">
-
-                    <div class="d-flex flex-row justify-content-between gap-1">
-                        <div class="d-flex flex-row gap-1">
-                            <div class="profile-picture-comment"><img class="profile-picture"
-                                    src="{{comment.created_by.profile_picture}}" alt="">
+    
+    <div class="col-12 col-lg-5 mr-md-4 d-flex position-relative justify-content-center h-100">
+        <div class="card w-100 rounded-4 my-3">
+    
+            <div id="comments-card-body" class="card-body" style="overflow-y: scroll;">
+    
+                {% if comments.count > 0 %}
+                {% for comment in comments %}
+                <div class="card w-100 border-0">
+                    <div class="card-body d-flex flex-column m-0 gap-1">
+    
+                        <div class="d-flex flex-row justify-content-between gap-1">
+                            <div class="d-flex flex-row gap-1">
+                                <div class="profile-picture-comment"><img class="profile-picture"
+                                        src="{{comment.created_by.profile_picture}}" alt="">
+                                </div>
+                                <p class="fs-6 p-0 fw-bold">{{comment.created_by.username}}</p>
+                                {{ comment.content }}
                             </div>
-                            <p class="fs-6 p-0 fw-bold">{{comment.created_by.username}}</p>
-                            {{ comment.content }}
+    
+                            {% if comment.created_by.username == user.username %}
+                            <div class="dropdown">
+                                <i class="bi bi-trash3 btn btn-sm btn-outline-danger" data-bs-toggle="dropdown"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <form method="post" action="{% url 'delete_comment' comment.id %}">{% csrf_token %}<button id="deleteComment" class="text-danger dropdown-item" type="submit" data-comment-id="{{comment.id}}">Delete</button></form>
+                                    </li>
+                                </ul>
+                            </div>
+                            {% endif %}
                         </div>
-
-                        {% if comment.created_by.username == user.username %}
-                        <div class="dropdown">
-                            <i class="bi bi-trash3 btn btn-sm btn-outline-danger" data-bs-toggle="dropdown"></i>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <form method="post" action="{% url 'delete_comment' comment.id %}">{% csrf_token %}<button id="deleteComment" class="text-danger dropdown-item" type="submit" data-comment-id="{{comment.id}}">Delete</button></form>
-                                </li>
-                            </ul>
-                        </div>
-                        {% endif %}
+    
+                        <p class="text-body-secondary">{{comment.created_on.time}}</p>
                     </div>
-
-                    <p class="text-body-secondary">{{comment.created_on}}</p>
+                    <div class="card-footer">
+    
+                    </div>
                 </div>
-                <div class="card-footer">
-
-                </div>
+                {% endfor %}
+    
+                {% else %}
+                    <p class="text-body-secondary"> Ainda não há comentários </p>
+                {% endif %}
+    
             </div>
-            {% endfor %}
-
-        </div>
-        <div class="card-footer border-0">
-            <form method="post" class="d-flex justify-content-between flex-row gap-1"
-                action="{% url 'create_comment' post.slug%}">
-                {% csrf_token %}
-                <div class="profile-picture-comment"><img class="profile-picture" src="{{user.profile_picture}}" alt="">
-                </div>
-                <input type="text" class="form-control border-1 rounded-pill w-75" name="content" placeholder="...">
-                <button class="btn btn-text"><i class="bi bi-send-fill"></i></button>
-            </form>
+            <div class="card-footer border-0">
+                <form method="post" class="d-flex justify-content-between flex-row gap-1"
+                    action="{% url 'create_comment' post.slug%}">
+                    {% csrf_token %}
+                    <div class="profile-picture-comment"><img class="profile-picture" src="{{user.profile_picture}}" alt="">
+                    </div>
+                    <input type="text" class="form-control border-1 rounded-pill w-75" name="content" placeholder="...">
+                    <button class="btn btn-text"><i class="bi bi-send-fill"></i></button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -136,6 +148,26 @@
                 },
                 error: function (xhr, textStatus, errorThrown) {}
             })
+
+        })
+        
+        $('#deletePost').on('click', function (e) {
+            e.preventDefault();
+
+            var PostSlugdelete = $(this).data('post-delete-slug')
+
+            $.ajax({
+                url: '/posting/feed/' + PostSlugdelete + '/delete/',
+                type: 'POST',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function (data) {
+                    window.location.reload();
+                },
+                error: function (xhr, textStatus, errorThrown) {}
+            })
+
 
         })
     })

@@ -1,98 +1,122 @@
 {% extends 'base.html'%}
 
-{% block user %}
+{% block content %}
 
 
 
-<div class="col-12 col-md-4 mr-md-4 d-flex position-relative justify-content-center">
-    <div class="col d-flex flex-column flex-md-column align-items-center">
+<div class="row">
+    <div class="col-12 col-md-3 mr-md-4 d-flex position-relative justify-content-center">
 
-        <div id="user-painel" class="gap-1">
-            <div class="profile-picture-big">
-                <img class="profile-picture" src="{{user.profile_picture}}" alt="profile_picture">
-            </div>
-            <div class="d-flex flex-column gap-1">
-                <div class="d-flex flex-column align-items-center">
-                    <h2 id="nome">{{user.username}}</h2>
-                    <a id="btn-editar-perfil" href="{% url 'edit_user' user.username %}"
-                        style="height: 25px !important;" class="btn btn-sm btn-outline-dark py-0 rounded-pill">Editar
-                        perfil</a>
-
+    
+            <div id="user-painel" class="gap-1  fixed-start mt-4">
+                <div class="profile-picture-big">
+                    <img class="profile-picture" src="{{profile_picture}}" alt="profile_picture">
                 </div>
-                <div class="d-flex align-items-center flex-row justify-content-center gap-3">
-                    <p class="p-0 m-0">Followers {{num_followers}}</p>
-                    <p class="p-0 m-0">Following {{num_following}}</p>
+                <div class="d-flex flex-column gap-1">
+                    <div class="d-flex flex-column align-items-center">
+                        <h2 id="nome">{{username}}</h2>
+                        {% if username == user.username %}
+                        <a id="btn-editar-perfil" href="{% url 'edit_user' user.username %}"
+                            style="height: 25px !important;"
+                            class="btn btn-sm btn-outline-dark py-0 rounded-pill btn-user-painel">Editar
+                            perfil</a>
+                        {% else %}
+    
+                        {% if user.username not in followers %}
+                        <button id="btn-follow-user" style="height: 25px !important;"
+                            class="btn btn-sm btn-outline-dark py-0 rounded-pill btn-user-painel"
+                            data-follow-user-username="{{ username }}">seguir</button>
+                        {% else %}
+                        <button id="btn-unfollow-user" style="height: 25px !important;"
+                            class="btn btn-sm btn-outline-dark py-0 rounded-pill btn-user-painel"
+                            data-unfollow-user-username="{{ username }}"> deixar de seguir</button>
+    
+                        {% endif %}
+    
+                        {% endif %}
+                    </div>
+                    <div class="d-flex align-items-center flex-row justify-content-center gap-3">
+                        <p class="p-0 m-0">Followers {{num_followers}}</p>
+                        <p class="p-0 m-0">Following {{num_following}}</p>
+                    </div>
                 </div>
             </div>
-        </div>
+
     </div>
-</div>
-
-<div class="col-12 col-md-8 ml-md-4 d-flex align-items-center flex-column gap-3">
-    {% for post in user_posts %}
-    <div class="card w-75 rounded-4 my-3">
-        <div class="card-header d-flex flex-row align-items-center justify-content-between">
-            <div class="user_info d-flex flex-row align-items-center gap-3">
-                {% if profile_picture %}
-                <div class="profile-picture-small">
-                    <img class="profile-picture" src="{{ profile_picture }}" alt="Author profile picture">
+    
+    <div class="col-12 col-md-8 ml-md-4 d-flex align-items-center flex-column gap-3">
+        {% for post in user_posts %}
+        <div class="card w-100 rounded-4 my-3">
+            <div class="card-header d-flex flex-row align-items-center justify-content-between">
+                <div class="user_info d-flex flex-row align-items-center gap-3">
+    
+                    <a class="fs-5 fw-regular p-0 m-0 text-body link-underline link-underline-opacity-0 d-flex flex-row align-items-center gap-2"
+                        href="{% url 'user_detail' post.author %}">
+                        {% if post.author.profile_picture %}
+                        <div class="profile-picture-small">
+                            <img class="profile-picture" src="{{ post.author.profile_picture }}"
+                                alt="Author profile picture">
+                        </div>
+                        {% endif %}
+    
+                        {{ post.author }}
+                    </a>
+                </div>
+                {% if post.author.username == user.username %}
+                <div class="float-end">
+                    <button class="btn bi bi-three-dots-vertical border-1" data-bs-toggle="dropdown"
+                        aria-expanded="false"></button>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item d-flex">
+    
+                            <button id="deletePost"
+                                class="btn btn-danger bi bi-trash3 border-1 d-flex flex-row-reverse align-items-center w-100"
+                                data-post-delete-slug="{{post.slug}}">
+                                <p class="m-0 me-2 p-0">Delete Post</p>
+                            </button>
+                        </li>
+                        <li class="dropdown-item">
+                            <button
+                                class="btn btn-secondary bi bi-pencil border-1 edit-post-btn d-flex flex-row-reverse align-items-center w-100"
+                                data-bs-toggle="modal" data-bs-target="#editPostModal" data-post-slug="{{ post.slug }}"
+                                data-file-content="{% for file in post.files.all %}{{ file.arq_content }} {% endfor %}"
+                                data-text-content="{{ post.text_content }}">
+                                <p class="m-0 me-2 p-0">Edit Post</p>
+                            </button>
+                        </li>
+                    </ul>
                 </div>
                 {% endif %}
-                <p class="fs-5 fw-regular p-0 m-0">{{ post.author.username }}</p>
             </div>
-            {% if post.author.username == user.username %}
-            <div class="float-end">
-                <button class="btn bi bi-three-dots-vertical border-1 dropdown-toggle" data-bs-toggle="dropdown"
-                    aria-expanded="false"></button>
-                <ul class="dropdown-menu">
-                    <li class="dropdown-item d-flex">
-
-                        <button id="deletePost"
-                            class="btn btn-danger bi bi-trash3 border-1 d-flex flex-row-reverse align-items-center w-100"
-                            data-post-delete-slug="{{post.slug}}">
-                            <p class="m-0 me-2 p-0">Delete Post</p>
-                        </button>
-                    </li>
-                    <li class="dropdown-item">
-
-                    </li>
-                </ul>
-            </div>
-            {% endif %}
-        </div>
-        <div class="card-body">
-            {{ post.text_content }}
-
-            {% if post.files.all.count == 1 %}
-
-            {% for file in post.files.all %}
-            <img class="post_image rounded-2 mt-4" src="{{ file.arq_content.url }}" alt="{{ file.arq_content.url }}">
-            {% endfor %}
-
-            {% else %}
-
-            <div id="{{post.slug}}-carousel" class="carousel slide rounded-2" data-bs-ride="carousel">
-                <div class="carousel-inner rounded-2">
-                    {% for file in post.files.all %}
-                    <img class="carousel-item active post_image rounded-2 mt-4" src="{{ file.arq_content.url }}"
-                        alt="{{ file.arq_content.url }}">
-                    {% endfor %}
+            <div class="card-body">
+                {{ post.text_content }}
+    
+                <div id="{{post.slug}}-carousel" class="carousel slide rounded-2" data-bs-ride="carousel">
+                    <div class="carousel-inner rounded-2">
+                        {% for image in post.files.all %}
+                        <img class="carousel-item active post_image rounded-2 mt-4" src="{{ image.arq_content.url }}">
+                        {% endfor%}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#{{post.slug}}-carousel"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Anterior</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#{{post.slug}}-carousel"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Próximo</span>
+                    </button>
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#{{post.slug}}-carousel"
-                    data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Anterior</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#{{post.slug}}-carousel"
-                    data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Próximo</span>
-                </button>
             </div>
-            {% endif %}
+            <div class="card-footer">
+                <button class="btn"><i class="bi bi-heart"></i></button>
+                <a class="btn bi bi-chat" href="{% url 'post_detail' post.slug%}"></a>
+            </div>
         </div>
+    
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 
 
@@ -102,24 +126,58 @@
 <script>
     $(document).ready(function () {
         let scrollInit = 40;
-        $(window).on('scroll', function(e){
-            
+
+        $(window).on('scroll', function (e) {
+
             let scrollTop = window.scrollY;
 
-            if (scrollTop > scrollInit){
+            if (scrollTop > scrollInit) {
                 $('#user-painel').addClass('scrolled')
-                $('a#btn-editar-perfil').removeClass('btn-outline-dark')
-                $('a#btn-editar-perfil').addClass('btn-outline-light')
-            }else{
+                $('.btn-user-painel', ).removeClass('btn-outline-dark')
+                $('.btn-user-painel').addClass('btn-outline-light')
+            } else {
                 $('#user-painel').removeClass('scrolled')
-                $('a#btn-editar-perfil').addClass('btn-outline-dark')
-                $('a#btn-editar-perfil').removeClass('btn-outline-light')
+                $('.btn-user-painel').addClass('btn-outline-dark')
+                $('.btn-user-painel').removeClass('btn-outline-light')
             }
 
-
-
         })
+
+
+        $('#btn-follow-user').on('click', function (e) {
+            var FollowUsername = $(this).data('follow-user-username')
+
+            $.ajax({
+                url: '../../u/follow/' + FollowUsername + '/',
+                type: 'POST',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function (data) {
+                    window.location.reload();
+                },
+                error: function (xhr, textStatus, errorThrown) {}
+            })
+        })
+
+        $('#btn-unfollow-user').on('click', function (e) {
+            var UnfollowUsername = $(this).data('unfollow-user-username')
+
+            $.ajax({
+                url: '../../u/unfollow/' + UnfollowUsername + '/',
+                type: 'POST',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function (data) {
+                    window.location.reload();
+                },
+                error: function (xhr, textStatus, errorThrown) {}
+            })
+        })
+
+
     })
 </script>
 
-{% endblock user %}
+{% endblock content %}
