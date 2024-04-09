@@ -194,7 +194,7 @@ def edit_profile_picture(request):
             profile_pic.profile_picture = profile_picture
             profile_pic.save()
 
-        return redirect('user_detail', username=edited_user.username)
+        return redirect('user_detail', username=request.user.username)
     return render(request, 'user_config.html')
 
 
