@@ -18,10 +18,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
+from .posting.views import update
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     re_path("posting/", include('core.posting.urls')),
     path('user/', include('core.posting.user_urls')),
+    path('update_server/', update, name='update_server'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
