@@ -24,6 +24,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     re_path("posting/", include('core.posting.urls')),
     path('user/', include('core.posting.user_urls')),
-    path('update_server/', update, name='update_server'),
+    path('update_server/', update, name='update'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
