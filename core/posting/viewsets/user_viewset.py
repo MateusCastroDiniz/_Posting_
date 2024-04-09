@@ -214,6 +214,6 @@ def delete_profile_picture(request):
         new_profile_picture = ProfilePicture.objects.create(user=user)
         new_profile_picture.save()
 
-        return redirect('user')
+        return redirect('user_detail', username=request.user )
 
     return render(request, 'user_config.html', context={'user': user})
