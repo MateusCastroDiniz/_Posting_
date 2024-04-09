@@ -101,6 +101,13 @@
                 </li>
                 {% else %}
                 <li class="sidebar-item">
+                    <a href="{% url '' %}" class="sidebar-link gap-2">
+                        <i class="bi bi-house"></i>
+                        <span>Home</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
                     <a href="{% url 'login' %}" class="sidebar-link gap-2">
                         <i class="bi bi-person"></i>
                         <span>Login</span>
@@ -115,15 +122,18 @@
                 </li>
                 {% endif %}
             </ul>
+            {% if user.is_authenticated %}
             <div class="sidebar-footer position-relative">
                 <a href="{% url 'logout' %}" class="sidebar-link link-danger bg-light p-2 m-3 rounded-3">
                     <i class="bi bi-slash-circle"></i>
                     <span>Logout</span>
                 </a>
             </div>
+            {% endif %}
+
         </aside>
         <div class="main p-3">
-            <div class="container h-100">
+            <div class="container h-100 position-relative">
                 {% block content %}
 
                 {% endblock content%}
@@ -135,7 +145,8 @@
 
     <div class="modal fade" id="createPostModal" tabindex="-1" aria-labelledby="createPostModalLabel"
         aria-hidden="true">
-        <form id="createPostForm" method="POST" enctype="multipart/form-data" data-url-create-post="{% url 'create_post' %}">
+        <form id="createPostForm" method="POST" enctype="multipart/form-data"
+            data-url-create-post="{% url 'create_post' %}">
             {% csrf_token %}
             <div class="modal-dialog modal-lg border-0 modal-dialog-centered">
                 <div class="modal-content container">
@@ -201,6 +212,54 @@
                         </div>
                     </div>
 
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal fade" id="editPostModal" tabindex="-1" aria-labelledby="editPostModalLabel" aria-hidden="true">
+        <form id="editPostForm" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" id="edit-post-slug" name="slug">
+            <div class="modal-dialog modal-lg border-0">
+                <div class="modal-content container h-auto">
+                    <div class="modal-header d-flex flex-row justify-content-between">
+                        <button type="button" class="btn m-0 p-1" data-bs-dismiss="modal" aria-label="Close"><i
+                                class="bi bi-x fs-5 m-0 p-0"></i></button>
+                        <h5 class="modal-title" id="editPostModalLabel">Edit Post</h5>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                    <div class="modal-body row d-flex flex-column position-relative">
+
+                        <div class="mb-3 col-12 float-start position-relative">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="text_content" id="text_content"
+                                    aria-describedby="basic-addon3 basic-addon4">
+                            </div>
+                        </div>
+
+                        <div class="col-12 position-relative">
+                            <div class="image_container_edit position-relative">
+                                <div id="carousel-post-files" class="carousel slide" data-bs-ride="false">
+                                    <div class="carousel-inner h-100 w-100" id="preview-post-file-edit">
+
+                                    </div>
+                                    <button class="carousel-control-prev" type="button"
+                                        data-bs-target="#carousel-post-files" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button"
+                                        data-bs-target="#carousel-post-files" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </form>
@@ -272,7 +331,7 @@
                 e.preventDefault();
                 var imageContainer = $(this).closest('[data-image-content]');
                 var imageIndex = $('#preview-post-image-create').children().index(imageContainer);
-                selectedFiles.splice(imageIndex-1, 1);
+                selectedFiles.splice(imageIndex - 1, 1);
                 imageContainer.remove();
                 console.log(selectedFiles);
 
@@ -283,20 +342,12 @@
                         'active');
                 } else {
                     // Caso contrário, define a próxima imagem como ativa
-                    $('#preview-post-image-create').children('.carousel-item').eq(imageIndex).addClass('active');
+                    $('#preview-post-image-create').children('.carousel-item').eq(imageIndex).addClass(
+                        'active');
                 }
 
 
             });
-
-
-            // $('#createPostForm').submit(function (e) {
-
-            //     var formData = new FormData();
-            //     selectedFiles.forEach(function (file) {
-            //         formData.append('file_content', file);
-            //     });
-            // });
 
             $('#submitPostbtn').on('click', function (e) {
                 e.preventDefault();
@@ -312,7 +363,7 @@
                 formData.append('text_content', $('#inputTextContent').val());
 
                 formData.append('csrfmiddlewaretoken', '{{ csrf_token }}')
-                
+
                 var urlCreatePost = $('#createPostForm').data('url-create-post');
 
                 $.ajax({
@@ -329,6 +380,96 @@
                     }
                 });
 
+            });
+            $('.btn-like-post').on('click', function (e) {
+                e.preventDefault();
+                var UrlLikePost = $(this).data('like-post-url')
+
+                $.ajax({
+                    url: UrlLikePost,
+                    type: 'POST',
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+                        window.location.reload();
+                    },
+                    error: function (xhr, textStatus, errorThrown) {}
+                })
+            })
+
+            $('.btn-dislike-post').on('click', function (e) {
+                e.preventDefault();
+
+                var UrlDisikePost = $(this).data('dislike-post-url')
+
+                $.ajax({
+                    url: UrlDisikePost,
+                    type: 'POST',
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data) {
+                        window.location.reload();
+                    },
+                    error: function (xhr, textStatus, errorThrown) {}
+                })
+            });
+
+            $('#deletePost').on('click', function (e) {
+                e.preventDefault();
+
+                var PostSlugdelete = $(this).data('post-delete-slug')
+
+                $.ajax({
+                    url: '/posting/feed/' + PostSlugdelete + '/delete/',
+                    type: 'POST',
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function (data) {
+                        window.location.reload();
+                    },
+                    error: function (xhr, textStatus, errorThrown) {}
+                })
+            })
+
+            $('.edit-post-btn').click(function () {
+                $('#preview-post-file-edit').empty();
+                var postSlug = $(this).data('post-slug');
+                var textContent = $(this).data('text-content');
+                var fileContent = $(this).data('file-content').split(' ');
+
+                $('#edit-post-slug').val(postSlug);
+                $('#text_content').val(textContent);
+
+                fileContent.forEach(function (fileUrl) {
+                    if (fileUrl.toLowerCase().endsWith('.jpg') || fileUrl.toLowerCase()
+                        .endsWith(
+                            '.jpeg') || fileUrl.toLowerCase().endsWith('.png')) {
+                        var carouselItem = '<div class="carousel-item active"><img src="' +
+                            fileUrl +
+                            '" class="d-block w-100" alt="Imagem"></div>';
+                        $('#preview-post-file-edit').append(carouselItem);
+                    }
+                });
+            });
+
+            $('#editPostForm').submit(function (e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+                var postSlug = $('#edit-post-slug').val();
+                $.ajax({
+                    url: '/posting/feed/' + postSlug + '/update/',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        window.location.reload();
+                    },
+                    error: function (xhr, textStatus, errorThrown) {}
+                });
             });
         });
     </script>

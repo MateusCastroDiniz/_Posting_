@@ -2,32 +2,38 @@
 {% block content %}
 
 
-<div class="row d-flex flex-column align-items-center">
-    <div class="col-6">
+<div class="row d-flex flex-column align-items-center h-100 position-relative">
+    <div class="col-12 col-lg-6 top-50 start-50 position-absolute translate-middle">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">My friends</h4>
-                {% for friends in user.following.all %}
-                <div class="card border-0" style="max-width: 100%;">
-                    <div class="g-0 d-flex flex-row align-items-center justify-content-between p-2 gap-3">
-                        <div class="d-flex flex-row align-items-center gap-2">
-                            <div class="profile-picture-small">
-                                <img src="{{friends.followed.profile_picture}}" class="img-fluid rounded-start" alt="...">
-                            </div>
-                            <div class="card-body m-0 p-0">
-                                <p class="m-0">{{friends.followed.username }}</p>
+                {% if user.following.count > 1 %}
 
+                    {% for friends in user.following.all %}
+                    <div class="card border-0" style="max-width: 100%;">
+                        <div class="g-0 d-flex flex-row align-items-center justify-content-between p-2 gap-3">
+                            <div class="d-flex flex-row align-items-center gap-2">
+                                <div class="profile-picture-small">
+                                    <img src="{{friends.followed.profile_picture}}" class="img-fluid rounded-start" alt="...">
+                                </div>
+                                <div class="card-body m-0 p-0">
+                                    <p class="m-0">{{friends.followed.username }}</p>
+
+                                </div>
                             </div>
-                        </div>
-                        <div class="d-flex">
-                            <button class="btn btn-sm btn-outline-dark btn-unfollow-user py-0 rounded-pill btn-user-painel"
-                                data-unfollow-user-username="{{ friends.followed.username }}"> deixar de seguir</button>
+                            <div class="d-flex">
+                                <button class="btn btn-sm btn-outline-dark btn-unfollow-user py-0 rounded-pill btn-user-painel"
+                                    data-unfollow-user-username="{{ friends.followed.username }}"> deixar de seguir</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-
-                {% endfor %}
+                    {% endfor %}
+                {%else%}
+                    <div class="d-flex flex-column justify-content-center">
+                        <p class="text-body-secondary text-center">Hmmm parece que não tem ninguém aqui ainda...</p>
+                        <a class="btn btn-sm btn-outline-primary" href="{% url 'find_user' %}">Encontrar amigos</a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

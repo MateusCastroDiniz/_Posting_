@@ -1,6 +1,90 @@
 {% extends 'base.html' %}
 {% block content %}
 
-    
+
+<div class="row d-flex flex-column flex-md-row w-100 position-absolute top-50 start-50 translate-middle">
+    <div class="col-12 col-md-6 d-flex flex-column justify-content-center align-items-center text-center">
+        <p class="fs-2 text-center">Seja bem vindo(a) ao Posting!</p>
+        <p>Aqui você pode ser você mesmo e compartilhar com quem desejar momentos que lhe são importantes.</p>
+        <div class="d-flex flex-row gap-2">
+            <a class="btn btn-outline-primary" href="{% url 'login' %}">Fazer login</a>
+            <a class="btn btn-primary" href="{% url 'signup' %}">Cadastrar-se</a>
+        </div>
+
+    </div>
+    <div class="col-12 col-md-5">
+        <div id="carouselId" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner p-4 d-flex align-items-center" role="listbox">
+                <div class="carousel-item active">
+                    <div class="card w-100 rounded-1">
+                        <div class="card-header d-flex flex-row align-items-center justify-content-between">
+                            <div class="user_info d-flex flex-row align-items-center gap-3">
+                                <div class="profile-picture-small">
+                                    <img class="profile-picture"
+                                        src="https://static.wikia.nocookie.net/onepiece/images/9/99/Tony_Tony_Chopper_Manga_Post_Timeskip_Infobox.png/revision/latest?cb=20190113140853&path-prefix=pt"
+                                        alt="Author profile picture">
+                                </div>
+
+                                <p class="card-title m-0 p-0">Mateus Diniz</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Hoje não deu pra tirar foto do rolê, mas foi legal!!!</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="card w-100 rounded-1">
+                        <div class="card-header d-flex flex-row align-items-center justify-content-between">
+                            <div class="user_info d-flex flex-row align-items-center gap-3">
+                                <div class="profile-picture-small">
+                                    <img class="profile-picture"
+                                        src="https://img.freepik.com/fotos-gratis/vista-lateral…o-ar-livre-com-smartphone_23-2148613048.jpg?w=740"
+                                        alt="Author profile picture">
+                                </div>
+
+                                <p class="card-title m-0 p-0">Roberta Maria</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Hoje foi um dia muito divertido!!!</p>
+                            <img src="https://img.freepik.com/fotos-gratis/selfie-de-mulher-sorridente-ao-ar-livre_23-2148613059.jpg"
+                                class="w-100 rounded-3" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="card w-100 rounded-1">
+                        <div class="card-header d-flex flex-row align-items-center justify-content-between">
+                            <div class="user_info d-flex flex-row align-items-center gap-3">
+                                <div class="profile-picture-small">
+                                    <img class="profile-picture"
+                                        src="https://img.freepik.com/fotos-gratis/jovem-alegre-tomando-selfie-na-praia_23-2148232340.jpg"
+                                        alt="Author profile picture">
+                                </div>
+
+                                <p class="card-title m-0 p-0">Diego Saudoso</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">É os guri hahahah!!!</p>
+                            <img src="https://img.freepik.com/fotos-premium/dois-miudos-…vertir-se-na-praia-gerada-pela-ia_686498-4854.jpg"
+                                class="w-100 rounded-3" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselId" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="false"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselId" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="false"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+
+    </div>
+</div>
 
 {% endblock content%}

@@ -4,5 +4,5 @@ from django.contrib import messages
 from ..models.user import User
 
 def landingpage_view(request):
-    return render(request, 'base.html')
+    return render(request, 'landingpage.html')
         

@@ -2,38 +2,28 @@
 
 {% block content %}
 
-        <div class="row">
-            <div class="col-12">
-                <div id="login-div" class="position-absolute top-50 start-50 translate-middle">
-                    <div class="col-5 w-100 d-flex align-items-center">
-                        <p class="fs-3 fw-regular">Seja bem vindo novamente.</p>
+<div class="row d-flex flex-column align-items-center h-100 position-relative">
+    <div class="col-12 col-lg-6 top-50 start-50 position-absolute translate-middle">
+        <p class="fs-3">Login</p>
+        <div class="card border-0">
+            <div class="card-body p-0">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="email_login" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="email_login" name="email"
+                            placeholder="email@example.com">
                     </div>
-                    <div class="col-8 d-flex align-items-center w-100">
-                        <div class="row">
-                            <div class="col-7 grow d-flex flex-column">
-                                <div class="card border-0">
-                                    <div class="card-body">
-                                        <form method="post">
-                                            {% csrf_token %}
-                                            <div class="mb-3">
-                                                <label for="email_login" class="form-label">Email address</label>
-                                                <input type="email" class="form-control" id="email_login" name="email"
-                                                    placeholder="email@example.com">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="password_login" class="form-label">Password</label>
-                                                <input type="password" class="form-control" id="password_login" name="password"
-                                                    placeholder="Password">
-                                            </div>
-                                            <button type="submit" class="btn btn-primary rounded-pill">Sign in</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="mb-3">
+                        <label for="password_login" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password_login" name="password"
+                            placeholder="Password">
                     </div>
-                </div>
+                    <button type="submit" class="btn btn-primary rounded-pill">Sign in</button>
+                </form>
             </div>
         </div>
-        
+    </div>
+</div>
+
 {% endblock content %}

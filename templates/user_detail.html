@@ -117,9 +117,20 @@
             </div>
             <div class="card-footer">
                 {% if user.is_authenticated%}
-                <button class="btn"><i class="bi bi-heart"></i></button>
-                {% endif%}
-                <a class="btn bi bi-chat" href="{% url 'post_detail' post.slug%}"></a>
+                    {% if post in liked_posts %}
+                    <button class="btn btn-dislike-post bi bi-heart-fill"
+                        data-dislike-post-url="{% url 'dislike_post' post.slug %}">
+                        {{ post.likes.count }}</button>
+    
+                    {% else %}
+    
+                    <button class="btn btn-like-post" data-like-post-url="{% url 'like_post' post.slug %}">
+                        {{ post.likes.count }} <i class="bi bi-heart"></i></button>
+                    {% endif %}
+                    
+                    {% endif%}
+                    <a class="btn bi bi-chat" href="{% url 'post_detail' post.slug%}"> {{ post.comments.count }}</a>
+                </div>
             </div>
         </div>
     
