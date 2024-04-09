@@ -101,8 +101,8 @@ class UserViewSet(viewsets.ModelViewSet):
         user = User.objects.get(username=username)
         user_posts = Post.objects.filter(author=user) # !!! Já está aqui! Não reinvente a roda!
         profile_picture = ProfilePicture.objects.get(user=user).profile_picture.url
-        # followers = [follower.follower for follower in Relation.objects.filter(followed=request.user)]
-        # following = [follower.followed for follower in Relation.objects.filter(follower=request.user)]
+        liked_posts = Post.objects.filter(likes__liked_by=request.user)
+
         followers = list(map(lambda x: x.follower.username, Relation.objects.filter(followed=user)))
         following = list(map(lambda x: x.followed.username, Relation.objects.filter(follower=user)))
         num_followers = len(followers)
@@ -116,7 +116,8 @@ class UserViewSet(viewsets.ModelViewSet):
                 'num_following': num_following,
                 'num_followers': num_followers,
                 'user_posts': user_posts,
-                'profile_picture': profile_picture
+                'profile_picture': profile_picture,
+                'liked_posts': liked_posts,
         }
         return render(request, 'user_detail.html', context)
 

@@ -149,6 +149,6 @@ def post_list(request):
 @login_required
 def explore_list(request):
     feed = Post.objects.filter()
-
+    liked_posts = Post.objects.filter(likes__liked_by=request.user)
     comments = Comment.objects.all().order_by('created_on')
-    return render(request, 'explore.html', {'feed': feed, 'comments': comments, 'user': request.user})
+    return render(request, 'explore.html', {'feed': feed,'liked_posts': liked_posts, 'comments': comments, 'user': request.user})
