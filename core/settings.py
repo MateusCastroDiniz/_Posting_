@@ -36,7 +36,7 @@ USE_TZ = False # if you plan to disable timezone support
 SECRET_KEY = "django-insecure-kllgq$g0934=bp4q3dit-2cy2c6-s$&_5@@xu8zy8!(p8h&7ur"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['localhost','127.0.0.1', 'matednz.pythonanywhere.com']
 
